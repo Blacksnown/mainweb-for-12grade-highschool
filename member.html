@@ -1,0 +1,28 @@
+<div
+  id="member-slots-widget"
+  class="fixed bottom-4 right-4 md:bottom-auto md:top-24 z-40 max-w-[280px] w-full bg-white/95 backdrop-blur border border-brand-300 p-4 rounded-2xl shadow-premium transition-all duration-300"
+>
+  <div
+    class="flex items-center justify-between mb-2 pb-1 border-b border-brand-100"
+  >
+    <h5
+      class="text-xs font-bold text-brand-900 uppercase tracking-wider flex items-center gap-1.5"
+    >
+      <i class="fa-solid fa-id-badge text-brand-700"></i> Xác nhận thành viên
+    </h5>
+    <span
+      id="current-slot-badge"
+      class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md"
+      >Chưa Chọn</span
+    >
+  </div>
+  <p class="text-[10px] text-neutral-500 mb-3 leading-tight">
+    Bấm chọn số thứ tự của bạn. Trang web sẽ tải lại để hiển thị tên và mở khóa
+    quyền viết.
+  </p>
+
+  <div
+    id="slots-container"
+    class="custom-scrollbar grid grid-cols-4 gap-1.5 max-h-52 overflow-y-auto pr-1"
+  ></div>
+</div>

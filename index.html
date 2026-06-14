@@ -1,0 +1,4332 @@
+<!-- <!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trạm Dừng Thanh Xuân - Hệ Sinh Thái Kỷ Niệm Số</title>
+
+ 
+    <script src="https://cdn.tailwindcss.com"></script>
+   
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Playfair Display", "serif"],
+            },
+            colors: {
+              brand: {
+                50: "#fffbf7",
+                100: "#fdf3e7",
+                200: "#f9e2c9",
+                300: "#f3c79f",
+                400: "#e8a36d",
+                700: "#bc5b1a",
+                800: "#944111",
+                900: "#642907",
+              },
+              sand: {
+                50: "#faf9f5",
+                100: "#f4f1e8",
+                200: "#e5dec9",
+                800: "#4c4738",
+              },
+            },
+            boxShadow: {
+              premium: "0 10px 30px -10px rgba(148, 65, 17, 0.15)",
+              glow: "0 0 20px rgba(232, 163, 109, 0.4)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #fdf3e7;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #f3c79f;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #e8a36d;
+      }
+
+      .glass-panel {
+        background: rgba(255, 251, 247, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(243, 199, 159, 0.4);
+      }
+
+      .polaroid {
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .polaroid:hover {
+        transform: translateY(-8px) rotate(1deg) scale(1.02);
+        box-shadow: 0 25px 40px rgba(148, 65, 17, 0.15);
+      }
+
+      .chalkboard {
+        background-color: #1a231f;
+        background-image:
+          radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0),
+          radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+        background-size: 16px 16px;
+        background-position:
+          0 0,
+          8px 8px;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-brand-50 text-neutral-800 font-sans min-h-screen selection:bg-brand-200 selection:text-brand-900 overflow-x-hidden antialiased"
+  >
+    <header
+      class="sticky top-0 z-40 glass-panel border-b border-brand-200 px-4 py-3.5 shadow-sm"
+    >
+      <div
+        class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4"
+      >
+        <div
+          class="flex items-center gap-3.5 cursor-pointer"
+          onclick="switchTab('home')"
+        >
+          <div
+            class="bg-gradient-to-br from-brand-700 to-brand-900 text-white w-11 h-11 rounded-2xl flex items-center justify-center shadow-premium transform hover:rotate-6 transition-all"
+          >
+            <i class="fa-solid fa-graduation-cap text-xl"></i>
+          </div>
+          <div>
+            <h1
+              class="font-serif font-bold text-xl md:text-2xl text-brand-900 tracking-wide"
+            >
+              Trạm Dừng Thanh Xuân
+            </h1>
+            <p
+              class="text-[10px] text-brand-700 tracking-widest font-bold uppercase"
+            >
+              Hệ sinh thái lưu giữ ký ức số niên khoá cấp ba
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="flex flex-wrap items-center justify-center gap-1.5 bg-brand-100/60 p-1 rounded-2xl border border-brand-200/50"
+        >
+          <button
+            onclick="switchTab('home')"
+            id="tab-home"
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-brand-900 bg-white shadow-sm border border-brand-200/30 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-school text-brand-700"></i>Home
+          </button>
+          <button
+            onclick="switchTab('memories')"
+            id="tab-memories"
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-book-open"></i>Kỷ Niệm
+          </button>
+          <button
+            onclick="switchTab('signatures')"
+            id="tab-signatures"
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-signature"></i>Nét Bút Chữ Ký
+          </button>
+          <button
+            onclick="switchTab('gallery')"
+            id="tab-gallery"
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-images"></i>Thư Viện Ảnh
+          </button>
+          <button
+            onclick="switchTab('capsule')"
+            id="tab-capsule"
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-box-archive"></i>Hộp Tương Lai
+          </button>
+        </div>
+
+ 
+        <div class="flex items-center gap-2">
+          <button
+            onclick="startTimeMachine()"
+            class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-brand-700 to-brand-800 hover:from-brand-800 hover:to-brand-900 shadow-premium hover:shadow-glow transform hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-hourglass-half"></i> Du Hành Ký Ức
+          </button>
+          <button
+            onclick="openAdminModal()"
+            class="p-2.5 rounded-xl text-neutral-500 hover:text-brand-700 hover:bg-white/80 transition-all relative border border-transparent hover:border-brand-200/50"
+            title="Cài đặt hệ thống"
+          >
+            <i class="fa-solid fa-gears text-base"></i>
+            <span
+              id="admin-badge"
+              class="hidden absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white"
+            ></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="fixed bottom-6 right-6 z-40">
+      <div
+        id="music-player-panel"
+        class="bg-white/95 border border-brand-200 p-3 rounded-2xl shadow-premium flex items-center gap-4 transition-all duration-300 transform scale-95 origin-bottom-right hover:scale-100 group"
+      >
+        <div class="flex items-center gap-2.5">
+          <button
+            id="music-trigger"
+            onclick="toggleSynthMusic()"
+            class="bg-brand-700 hover:bg-brand-800 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow transition-all active:scale-95"
+          >
+            <i class="fa-solid fa-play" id="music-icon"></i>
+          </button>
+          <div class="text-left select-none pr-2">
+            <p
+              class="text-[10px] font-bold text-brand-700 tracking-wider uppercase"
+            >
+              Giai Điệu Thư Thái
+            </p>
+            <p
+              class="text-xs font-semibold text-neutral-700 truncate max-w-[100px]"
+              id="current-track-name"
+            >
+              Nostalgia piano
+            </p>
+          </div>
+        </div>
+        <div
+          class="hidden sm:flex items-center gap-2 border-l border-brand-100 pl-3"
+        >
+          <i class="fa-solid fa-volume-low text-neutral-400 text-xs"></i>
+          <input
+            type="range"
+            id="synth-volume"
+            min="0"
+            max="100"
+            value="30"
+            oninput="adjustVolume(this.value)"
+            class="w-16 h-1 bg-brand-200 rounded-lg appearance-none cursor-pointer accent-brand-700"
+          />
+        </div>
+      </div>
+    </div>
+
+    
+    <main class="max-w-7xl mx-auto px-4 py-6 relative">
+     
+      <div
+        id="sync-status"
+        class="mb-6 text-xs flex flex-wrap items-center justify-between gap-3 p-3 bg-white/60 backdrop-blur border border-brand-200/50 rounded-2xl shadow-sm"
+      >
+        <div class="flex items-center gap-2.5">
+          <span
+            id="status-dot"
+            class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"
+          ></span>
+          <span id="status-text" class="text-neutral-600 font-medium"
+            >Đang thiết lập kết nối lưu trữ đám mây thời gian thực...</span
+          >
+        </div>
+        <button
+          id="rule-guide-btn"
+          onclick="openRulesModal()"
+          class="hidden text-[10px] bg-red-50 hover:bg-red-100 text-red-700 font-bold py-1.5 px-3 rounded-lg transition-all border border-red-200/50"
+        >
+          <i class="fa-solid fa-circle-exclamation mr-1"></i> Khắc Phục Lỗi Kết
+          Nối Đám Mây
+        </button>
+      </div>
+
+    
+      <div
+        id="section-home"
+        class="tab-content space-y-12 transition-all duration-300"
+      
+        <div
+          class="relative bg-gradient-to-br from-brand-900 to-neutral-900 rounded-3xl p-8 md:p-14 text-white overflow-hidden shadow-premium"
+        >
+          <div
+            class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-400/20 via-transparent to-transparent opacity-80"
+          ></div>
+          <div
+            class="absolute -right-10 -bottom-10 opacity-5 w-80 h-80 border-8 border-dashed border-white rounded-full"
+          ></div>
+
+          <div class="relative z-10 max-w-3xl space-y-4">
+            <span
+              class="bg-white/10 text-brand-200 text-xs font-bold px-3 py-1.5 rounded-xl uppercase tracking-widest border border-white/15"
+              >Mái Trường Mến Yêu</span
+            >
+            <h2
+              class="font-serif text-3xl md:text-5xl font-bold mt-2 leading-tight"
+            >
+              Thời gian có thể trôi qua,<br />Kỷ niệm sẽ được giữ lại.
+            </h2>
+            <p
+              class="text-brand-100 text-sm md:text-base leading-relaxed font-light"
+            >
+              Chào mừng bạn bước qua cánh cửa thời gian. Đây là nơi lưu lại danh
+              sách thành viên của lớp học, bảng vàng thành tích lừng lẫy, những
+              bức thư gửi cho tương lai, và bức tường ký tên mộc mạc lưu lại
+              đúng nét vẽ tay của tuổi mười bảy thanh xuân.
+            </p>
+            <div class="flex items-center gap-6 pt-2">
+              <div class="text-center">
+                <span
+                  class="block text-2xl md:text-3xl font-bold font-serif text-brand-300"
+                  id="cnt-members"
+                  >0</span
+                >
+                <span
+                  class="text-[10px] text-brand-200 font-medium uppercase tracking-wider"
+                  >Thành viên lớp</span
+                >
+              </div>
+              <div class="w-px h-8 bg-white/20"></div>
+              <div class="text-center">
+                <span
+                  class="block text-2xl md:text-3xl font-bold font-serif text-brand-300"
+                  id="cnt-teachers"
+                  >0</span
+                >
+                <span
+                  class="text-[10px] text-brand-200 font-medium uppercase tracking-wider"
+                  >Người đưa đò</span
+                >
+              </div>
+              <div class="w-px h-8 bg-white/20"></div>
+              <div class="text-center">
+                <span
+                  class="block text-2xl md:text-3xl font-bold font-serif text-brand-300"
+                  id="cnt-memories"
+                  >0</span
+                >
+                <span
+                  class="text-[10px] text-brand-200 font-medium uppercase tracking-wider"
+                  >Kỷ niệm viết</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section class="space-y-6">
+          <div
+            class="flex items-end justify-between border-b border-brand-200/50 pb-3"
+          >
+            <div class="space-y-1">
+              <h3
+                class="font-serif text-2xl md:text-3xl font-bold text-brand-900 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-users text-brand-700"></i> Thành Viên Lớp
+                Mình
+              </h3>
+              <p class="text-xs text-neutral-500">
+                Mỗi cá nhân là một mảng màu rực rỡ dệt nên bức tranh chung
+              </p>
+            </div>
+            <button
+              id="admin-add-member-btn"
+              onclick="openMemberEditor()"
+              class="hidden text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-premium transition-all"
+            >
+              <i class="fa-solid fa-user-plus mr-1.5"></i>Thêm Thành Viên
+            </button>
+          </div>
+
+          <div
+            id="students-grid"
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+          >
+            <div class="col-span-full py-12 text-center text-neutral-400">
+              <i
+                class="fa-solid fa-spinner animate-spin text-3xl mb-3 text-brand-400"
+              ></i>
+              <p class="text-xs">Đang tải hồ sơ thành viên...</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-6">
+          <div
+            class="flex items-end justify-between border-b border-brand-200/50 pb-3"
+          >
+            <div class="space-y-1">
+              <h3
+                class="font-serif text-2xl md:text-3xl font-bold text-brand-900 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-chalkboard-user text-brand-700"></i> Người
+                Đưa Đò Tâm Huyết
+              </h3>
+              <p class="text-xs text-neutral-500">
+                Tri ân sâu sắc những người thầy người cô đã dạy dỗ suốt 3 năm
+              </p>
+            </div>
+            <button
+              id="admin-add-teacher-btn"
+              onclick="openTeacherEditor()"
+              class="hidden text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-premium transition-all"
+            >
+              <i class="fa-solid fa-plus mr-1.5"></i>Thêm Thầy/Cô
+            </button>
+          </div>
+
+          <div id="teachers-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="col-span-full text-center py-6 text-neutral-400">
+              Đang khởi tạo danh sách giáo viên...
+            </div>
+          </div>
+        </section>
+
+        <section class="space-y-6">
+          <div
+            class="flex items-end justify-between border-b border-brand-200/50 pb-3"
+          >
+            <div class="space-y-1">
+              <h3
+                class="font-serif text-2xl md:text-3xl font-bold text-brand-900 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-award text-brand-700"></i> Bảng Vàng Thành
+                Tích 3 Năm
+              </h3>
+              <p class="text-xs text-neutral-500">
+                Những cột mốc huy hoàng tập thể lớp đã đồng hành chinh phục
+              </p>
+            </div>
+            <button
+              id="admin-add-achievement-btn"
+              onclick="openAchievementEditor()"
+              class="hidden text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-premium transition-all"
+            >
+              <i class="fa-solid fa-plus mr-1.5"></i>Thêm Thành Tích
+            </button>
+          </div>
+
+          <div id="achievements-timeline" class="space-y-4">
+            <div class="text-center py-6 text-neutral-400">
+              Đang chuẩn bị bảng thành tích học đường...
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div
+        id="section-memories"
+        class="tab-content hidden space-y-8 transition-all duration-300"
+      >
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div
+            class="bg-white border border-brand-200/60 rounded-2xl p-6 shadow-sm h-fit sticky top-24"
+          >
+            <h4
+              class="font-serif text-xl font-bold text-brand-900 mb-1.5 flex items-center gap-2"
+            >
+              <i class="fa-solid fa-pen-nib text-brand-700"></i> Góp Nhặt Kỷ
+              Niệm
+            </h4>
+            <p class="text-xs text-neutral-500 mb-6">
+              Mỗi mẩu chuyện bạn viết xuống sẽ ngay lập tức được dệt vào Cỗ Máy
+              Thời Gian chung.
+            </p>
+
+            <form
+              id="memory-form"
+              onsubmit="submitMemory(event)"
+              class="space-y-4"
+            >
+              <div>
+                <label
+                  class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1"
+                  >Tên của bạn *</label
+                >
+                <input
+                  type="text"
+                  id="memory-author"
+                  required
+                  placeholder="Ví dụ: Hoàng Nam, Ly Ly..."
+                  class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none transition-all"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1"
+                  >Mốc Thời Gian *</label
+                >
+                <select
+                  id="memory-period"
+                  required
+                  class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none transition-all cursor-pointer"
+                >
+                  <option value="10-1">
+                    Lớp 10 - Học Kỳ 1 (Bỡ ngỡ gặp gỡ)
+                  </option>
+                  <option value="10-2">
+                    Lớp 10 - Học Kỳ 2 (Quen trường mến bạn)
+                  </option>
+                  <option value="11-1">
+                    Lớp 11 - Học Kỳ 1 (Sôi nổi phong trào)
+                  </option>
+                  <option value="11-2">
+                    Lớp 11 - Học Kỳ 2 (Gắn bó keo sơn)
+                  </option>
+                  <option value="12-1">
+                    Lớp 12 - Học Kỳ 1 (Bắt đầu tăng tốc)
+                  </option>
+                  <option value="12-2">
+                    Lớp 12 - Học Kỳ 2 (Gấp gáp mùa thi)
+                  </option>
+                  <option value="12-3">
+                    Lớp 12 - Ngày Chia Ly (Mùa phượng đỏ cuối cùng)
+                  </option>
+                </select>
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1"
+                  >Kỷ niệm muốn sẻ chia *</label
+                >
+                <textarea
+                  id="memory-text"
+                  required
+                  rows="5"
+                  placeholder="Viết dòng hồi ức chân thực, những trò nghịch dợm hay lời xin lỗi chưa kịp nói..."
+                  class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none resize-none transition-all"
+                ></textarea>
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1"
+                  >Biểu tượng cảm xúc (Emoji)</label
+                >
+                <input
+                  type="text"
+                  id="memory-emoji"
+                  placeholder="Ví dụ: 🌸, 🎒, 📝, 😭, ✏️, ⚽"
+                  class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none transition-all"
+                />
+              </div>
+              <button
+                type="submit"
+                class="w-full py-3 bg-brand-700 hover:bg-brand-800 text-white font-bold rounded-xl text-sm transition-all shadow-premium hover:shadow-glow flex items-center justify-center gap-2"
+              >
+                <i class="fa-solid fa-paper-plane"></i> Gửi Gắm Lưu Bút
+              </button>
+            </form>
+          </div>
+
+          <div class="lg:col-span-2 space-y-6">
+            <div class="flex items-center justify-between">
+              <h4 class="font-serif text-2xl font-bold text-brand-900">
+                Nhật Ký Thời Gian Lớp Mình
+              </h4>
+              <span
+                id="memories-count"
+                class="bg-brand-200 text-brand-900 text-xs font-bold px-3 py-1 rounded-full"
+                >0 kỷ niệm</span
+              >
+            </div>
+
+            <div class="flex flex-wrap gap-2 py-1">
+              <button
+                onclick="filterMemories('all')"
+                class="filter-chip px-4 py-2 rounded-full text-xs font-semibold bg-brand-700 text-white transition-all shadow-sm"
+              >
+                Tất cả
+              </button>
+              <button
+                onclick="filterMemories('10')"
+                class="filter-chip px-4 py-2 rounded-full text-xs font-semibold bg-white text-neutral-600 border border-brand-200 hover:bg-brand-100 transition-all"
+              >
+                Năm Lớp 10
+              </button>
+              <button
+                onclick="filterMemories('11')"
+                class="filter-chip px-4 py-2 rounded-full text-xs font-semibold bg-white text-neutral-600 border border-brand-200 hover:bg-brand-100 transition-all"
+              >
+                Năm Lớp 11
+              </button>
+              <button
+                onclick="filterMemories('12')"
+                class="filter-chip px-4 py-2 rounded-full text-xs font-semibold bg-white text-neutral-600 border border-brand-200 hover:bg-brand-100 transition-all"
+              >
+                Năm Lớp 12
+              </button>
+            </div>
+
+            <div id="memories-feed" class="space-y-4">
+              <div class="text-center py-12 text-neutral-400">
+                <i
+                  class="fa-solid fa-spinner animate-spin text-3xl mb-3 text-brand-400"
+                ></i>
+                <p class="text-xs">Đang đồng bộ dòng thời gian niên khoá...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="section-signatures"
+        class="tab-content hidden space-y-8 transition-all duration-300"
+      >
+        <div class="text-center max-w-2xl mx-auto space-y-3">
+          <h3 class="font-serif text-3xl font-bold text-brand-900">
+            Bức Tường Chữ Ký Học Sinh
+          </h3>
+          <p class="text-sm text-neutral-500 leading-relaxed">
+            Sử dụng chuột trên máy tính hoặc ngón tay vẽ trên điện thoại để để
+            lại nét chữ mộc mạc lưu dấu mãi về sau.
+          </p>
+          <button
+            onclick="openSignatureCanvasModal()"
+            class="inline-flex items-center gap-2 bg-brand-800 hover:bg-brand-950 text-white font-bold py-3 px-6 rounded-2xl shadow-premium hover:shadow-glow transition-all transform hover:-translate-y-0.5"
+          >
+            <i class="fa-solid fa-signature"></i> Đặt Bút Lưu Chữ Ký Ngay
+          </button>
+        </div>
+
+        <div class="border-t border-brand-200/50 pt-8">
+          <div class="flex items-center justify-between mb-6">
+            <h4 class="font-serif text-xl font-bold text-brand-900">
+              <i class="fa-solid fa-images text-brand-700"></i> Nét Chữ Mộc Mạc
+              Còn Mãi
+            </h4>
+            <span
+              id="signatures-count"
+              class="bg-brand-200 text-brand-900 text-xs font-bold px-3 py-1 rounded-full"
+              >0 chữ ký</span
+            >
+          </div>
+
+          <div
+            id="signatures-grid"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          >
+            <div class="col-span-full py-12 text-center text-neutral-400">
+              <i
+                class="fa-solid fa-spinner animate-spin text-3xl mb-3 text-brand-400"
+              ></i>
+              <p class="text-xs">Đang tải bức tường gỗ chữ ký...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="section-gallery"
+        class="tab-content hidden space-y-8 transition-all duration-300"
+      >
+        <div
+          class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-brand-200/50 pb-4"
+        >
+          <div class="space-y-1">
+            <h3
+              class="font-serif text-2xl md:text-3xl font-bold text-brand-900"
+            >
+              <i class="fa-solid fa-camera-retro text-brand-700"></i> Thư Viện
+              Khoảnh Khắc Học Trò
+            </h3>
+            <p class="text-xs text-neutral-500">
+              Nơi những nụ cười, bóng lưng và khoảnh khắc tập thể được lưu giữ
+            </p>
+          </div>
+          <button
+            onclick="openUploadPhotoModal()"
+            class="bg-brand-700 hover:bg-brand-800 text-white font-bold py-2.5 px-4 rounded-xl shadow-premium text-xs transition-all flex items-center gap-1.5"
+          >
+            <i class="fa-solid fa-cloud-arrow-up"></i> Gửi Ảnh Kỷ Niệm
+          </button>
+        </div>
+
+        <div
+          id="photos-grid"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+        >
+          <div class="col-span-full text-center py-12 text-neutral-400">
+            <i
+              class="fa-solid fa-spinner animate-spin text-3xl mb-3 text-brand-400"
+            ></i>
+            <p class="text-xs">Đang mở khoá album ảnh chung...</p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="section-capsule"
+        class="tab-content hidden space-y-8 transition-all duration-300"
+      >
+        <div class="max-w-4xl mx-auto space-y-8">
+          <div class="text-center space-y-3">
+            <h3 class="font-serif text-3xl font-bold text-brand-900">
+              <i class="fa-solid fa-box-archive text-brand-700"></i> Hộp Thư Gửi
+              Tương Lai
+            </h3>
+            <p
+              class="text-sm text-neutral-500 max-w-xl mx-auto leading-relaxed"
+            >
+              Hãy viết một lá thư gửi tới chính mình hoặc tập thể lớp của nhiều
+              năm về sau. Hệ thống sẽ khoá chặt và chỉ cho phép mở khoá đúng
+              thời gian bạn mong muốn.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            <div
+              class="bg-white border border-brand-200/60 p-6 rounded-2xl shadow-sm md:col-span-5 space-y-4"
+            >
+              <h4
+                class="font-bold text-neutral-800 text-sm uppercase tracking-wider border-b border-brand-100 pb-2"
+              >
+                Gieo Mầm Tương Lai
+              </h4>
+              <form
+                id="capsule-form"
+                onsubmit="submitCapsule(event)"
+                class="space-y-4"
+              >
+                <div>
+                  <label class="block text-xs font-bold text-neutral-600 mb-1"
+                    >Họ Tên Của Bạn *</label
+                  >
+                  <input
+                    type="text"
+                    id="capsule-author"
+                    required
+                    placeholder="Nhập tên thật..."
+                    class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none transition-all"
+                  />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-neutral-600 mb-1"
+                    >Thời Gian Niêm Phong *</label
+                  >
+                  <select
+                    id="capsule-duration"
+                    required
+                    class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none transition-all cursor-pointer"
+                  >
+                    <option value="1">1 Năm (Khi mới lên đại học)</option>
+                    <option value="3">3 Năm (Quãng giữa đại học)</option>
+                    <option value="5">5 Năm (Khi đã ra trường đi làm)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-neutral-600 mb-1"
+                    >Nội dung thư gửi bản thân *</label
+                  >
+                  <textarea
+                    id="capsule-message"
+                    required
+                    rows="6"
+                    placeholder="Ước mơ lớn nhất của bạn bây giờ là gì? Cậu muốn nhắn gửi gì cho cậu của tương lai?..."
+                    class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2.5 px-3 text-sm outline-none resize-none transition-all"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  class="w-full py-3 bg-neutral-900 hover:bg-neutral-800 text-white font-bold rounded-xl text-sm transition-all shadow-premium flex items-center justify-center gap-2"
+                >
+                  <i class="fa-solid fa-lock"></i> Niêm Phong & Gửi Đi
+                </button>
+              </form>
+            </div>
+
+            <div class="md:col-span-7 space-y-4">
+              <h4
+                class="font-bold text-neutral-800 text-sm uppercase tracking-wider border-b border-brand-100 pb-2"
+              >
+                Hộp Thư Đang Khoá
+              </h4>
+              <div
+                id="capsules-list"
+                class="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              >
+                <div class="col-span-full text-center py-8 text-neutral-400">
+                  Đang quét hòm thư niêm phong...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div
+      id="time-machine-screen"
+      class="fixed inset-0 z-50 bg-neutral-950 text-white hidden flex-col transition-all duration-500"
+    >
+      <canvas
+        id="dust-canvas"
+        class="absolute inset-0 pointer-events-none opacity-40"
+      ></canvas>
+
+      <div
+        class="relative z-10 px-6 py-4 flex items-center justify-between border-b border-white/10 bg-gradient-to-b from-black/80 to-transparent"
+      >
+        <div class="flex items-center gap-3">
+          <span
+            class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"
+          ></span>
+          <span class="font-serif text-lg tracking-wide text-brand-200"
+            >Du Hành Ký Ức Thanh Xuân</span
+          >
+        </div>
+        <div class="flex items-center gap-4">
+          <span
+            id="tm-progress-indicator"
+            class="text-xs text-neutral-400 font-mono"
+            >0 / 0</span
+          >
+          <button
+            onclick="stopTimeMachine()"
+            class="p-2 rounded-full hover:bg-white/10 text-neutral-300 hover:text-white transition-all"
+          >
+            <i class="fa-solid fa-circle-xmark text-2xl"></i>
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="relative z-10 flex-1 flex flex-col justify-center items-center px-6 py-8 overflow-hidden"
+      >
+        <div
+          id="tm-stage"
+          class="max-w-3xl w-full text-center space-y-8 transform transition-all duration-700 opacity-0 scale-95"
+        >
+          <div class="inline-block">
+            <span
+              id="tm-period-badge"
+              class="bg-brand-800 text-brand-100 border border-brand-700 text-xs font-bold tracking-widest uppercase px-5 py-2 rounded-full shadow-glow"
+              >Lớp 10</span
+            >
+          </div>
+
+          <div class="space-y-6">
+            <div id="tm-emoji" class="text-7xl">🌸</div>
+            <p
+              id="tm-text"
+              class="font-serif text-xl sm:text-3xl md:text-4xl text-neutral-100 leading-relaxed italic max-h-[48vh] overflow-y-auto px-4 font-light select-none"
+            >
+              "Không có nội dung..."
+            </p>
+          </div>
+
+          <div class="border-t border-white/10 pt-4 max-w-xs mx-auto">
+            <p id="tm-author" class="font-bold tracking-wider text-brand-200">
+              Hoàng Nam
+            </p>
+            <p
+              id="tm-meta"
+              class="text-[10px] text-neutral-400 mt-1 uppercase tracking-wider"
+            >
+              Được ghi lại
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="relative z-10 px-6 py-6 border-t border-white/10 bg-gradient-to-t from-black/80 to-transparent flex flex-col sm:flex-row items-center justify-between gap-4"
+      >
+        <div class="text-[11px] text-neutral-400 flex items-center gap-1.5">
+          <i class="fa-solid fa-info-circle text-brand-300"></i> Dòng thời gian
+          tự động trình diễn sau mỗi 8 giây
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button
+            onclick="prevTimeStep()"
+            class="p-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all active:scale-95"
+            title="Kỷ niệm trước"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <button
+            id="tm-play-pause-btn"
+            onclick="toggleTimeAutoplay()"
+            class="p-3.5 px-6 rounded-xl bg-brand-700 hover:bg-brand-600 text-white font-bold text-xs tracking-wider uppercase transition-all active:scale-95 flex items-center gap-2 shadow-glow"
+            title="Tạm dừng/Phát tiếp"
+          >
+            <i id="tm-play-icon" class="fa-solid fa-pause"></i>
+            <span id="tm-play-text">Tự động phát</span>
+          </button>
+          <button
+            onclick="nextTimeStep()"
+            class="p-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all active:scale-95"
+            title="Kỷ niệm sau"
+          >
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="member-editor-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-premium flex flex-col max-h-[90vh]"
+      >
+        <div
+          class="bg-neutral-50 px-6 py-4 border-b border-neutral-150 flex items-center justify-between"
+        >
+          <h4
+            id="member-modal-title"
+            class="font-serif text-lg font-bold text-neutral-800"
+          >
+            Thêm Thành Viên
+          </h4>
+          <button
+            onclick="closeMemberEditor()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4 flex-1 overflow-y-auto">
+          <input type="hidden" id="edit-member-id" />
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Tên thành viên *</label
+            >
+            <input
+              type="text"
+              id="edit-member-name"
+              required
+              placeholder="Tên thật..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Biệt danh / Danh xưng</label
+            >
+            <input
+              type="text"
+              id="edit-member-nickname"
+              placeholder="Ví dụ: Nam Còi..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Châm ngôn thanh xuân</label
+            >
+            <input
+              type="text"
+              id="edit-member-quote"
+              placeholder="Châm ngôn..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Hình Đại Diện (Chỉ cần gõ Emoji hoặc chèn Link ảnh)</label
+            >
+            <input
+              type="text"
+              id="edit-member-emoji"
+              placeholder="Ví dụ: 🤠, 🙋‍♀️, hoặc link ảnh trực tuyến..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-between"
+        >
+          <button
+            id="delete-member-btn"
+            onclick="triggerDeleteMember()"
+            class="hidden px-3.5 py-2 text-xs font-bold text-red-600 hover:text-red-700 transition-all"
+          >
+            <i class="fa-solid fa-trash mr-1"></i> Xóa
+          </button>
+          <div class="flex gap-2">
+            <button
+              onclick="closeMemberEditor()"
+              class="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl text-xs font-bold"
+            >
+              Hủy
+            </button>
+            <button
+              onclick="saveMember()"
+              class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs"
+            >
+              Lưu Lại
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    
+    <div
+      id="teacher-editor-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-premium flex flex-col max-h-[90vh]"
+      >
+        <div
+          class="bg-neutral-50 px-6 py-4 border-b border-neutral-150 flex items-center justify-between"
+        >
+          <h4
+            id="teacher-modal-title"
+            class="font-serif text-lg font-bold text-neutral-800"
+          >
+            Thêm Giáo Viên
+          </h4>
+          <button
+            onclick="closeTeacherEditor()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4 flex-1 overflow-y-auto">
+          <input type="hidden" id="edit-teacher-id" />
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Họ Tên Thầy/Cô *</label
+            >
+            <input
+              type="text"
+              id="edit-teacher-name"
+              required
+              placeholder="Họ và tên..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Môn giảng dạy / Vị trí *</label
+            >
+            <input
+              type="text"
+              id="edit-teacher-subject"
+              required
+              placeholder="Ví dụ: Giáo viên chủ nhiệm..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Câu nói thương hiệu / Lời nhắn nhủ</label
+            >
+            <textarea
+              id="edit-teacher-quote"
+              rows="3"
+              placeholder="Nhập lời nhắn gửi..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700 resize-none"
+            ></textarea>
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Niên khoá / Giai đoạn gắn bó</label
+            >
+            <input
+              type="text"
+              id="edit-teacher-period"
+              placeholder="Ví dụ: Lớp 10, Cả 3 năm..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-between"
+        >
+          <button
+            id="delete-teacher-btn"
+            onclick="triggerDeleteTeacher()"
+            class="hidden px-3.5 py-2 text-xs font-bold text-red-600 hover:text-red-700 transition-all"
+          >
+            <i class="fa-solid fa-trash mr-1"></i> Xóa
+          </button>
+          <div class="flex gap-2">
+            <button
+              onclick="closeTeacherEditor()"
+              class="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl text-xs font-bold"
+            >
+              Hủy
+            </button>
+            <button
+              onclick="saveTeacher()"
+              class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs"
+            >
+              Lưu Lại
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="achievement-editor-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-premium flex flex-col max-h-[90vh]"
+      >
+        <div
+          class="bg-neutral-50 px-6 py-4 border-b border-neutral-150 flex items-center justify-between"
+        >
+          <h4
+            id="achievement-modal-title"
+            class="font-serif text-lg font-bold text-neutral-800"
+          >
+            Thêm Thành Tích
+          </h4>
+          <button
+            onclick="closeAchievementEditor()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4 flex-1 overflow-y-auto">
+          <input type="hidden" id="edit-achievement-id" />
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Tên Thành Tích / Giải Thưởng *</label
+            >
+            <input
+              type="text"
+              id="edit-achievement-title"
+              required
+              placeholder="Nhập tên giải..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Khối lớp đạt giải *</label
+            >
+            <select
+              id="edit-achievement-year"
+              required
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700 cursor-pointer"
+            >
+              <option value="10">Năm Lớp 10</option>
+              <option value="11">Năm Lớp 11</option>
+              <option value="12">Năm Lớp 12</option>
+            </select>
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Mô tả cụ thể chiến tích</label
+            >
+            <textarea
+              id="edit-achievement-desc"
+              rows="3"
+              placeholder="Ghi thêm các chi tiết thú vị..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700 resize-none"
+            ></textarea>
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-between"
+        >
+          <button
+            id="delete-achievement-btn"
+            onclick="triggerDeleteAchievement()"
+            class="hidden px-3.5 py-2 text-xs font-bold text-red-600 hover:text-red-700 transition-all"
+          >
+            <i class="fa-solid fa-trash mr-1"></i> Xóa
+          </button>
+          <div class="flex gap-2">
+            <button
+              onclick="closeAchievementEditor()"
+              class="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl text-xs font-bold"
+            >
+              Hủy
+            </button>
+            <button
+              onclick="saveAchievement()"
+              class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs"
+            >
+              Lưu Lại
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="sig-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-premium flex flex-col max-h-[95vh]"
+      >
+        <div
+          class="bg-brand-50 px-6 py-4 border-b border-brand-200 flex items-center justify-between"
+        >
+          <h4 class="font-serif text-lg font-bold text-brand-900">
+            <i class="fa-solid fa-signature mr-2 text-brand-700"></i> Đặt Bút
+            Lưu Chữ Ký
+          </h4>
+          <button
+            onclick="closeSignatureCanvasModal()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4 flex-1 overflow-y-auto">
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Họ Tên Thật Của Bạn *</label
+            >
+            <input
+              type="text"
+              id="sig-owner"
+              required
+              placeholder="Nhập tên..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Lời nhắn / Châm ngôn ngắn</label
+            >
+            <input
+              type="text"
+              id="sig-quote"
+              placeholder="Lời nhắn ngủ đến tập thể lớp..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-neutral-600 uppercase"
+                >Ký trực tiếp vào khung vẽ dưới đây</label
+              >
+              <button
+                onclick="clearSignatureCanvas()"
+                class="text-xs text-red-600 hover:text-red-700 font-bold"
+              >
+                <i class="fa-solid fa-eraser mr-1"></i>Vẽ lại
+              </button>
+            </div>
+            <div
+              class="chalkboard border border-brand-200/60 rounded-2xl overflow-hidden aspect-[16/9] relative cursor-crosshair"
+            >
+              <canvas
+                id="signature-canvas"
+                class="w-full h-full block touch-none"
+              ></canvas>
+              <div
+                class="absolute bottom-2.5 left-2.5 pointer-events-none text-[10px] text-neutral-400 bg-neutral-950/70 px-2.5 py-1 rounded-lg"
+              >
+                Ký bằng ngón tay hoặc chuột
+              </div>
+            </div>
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-2"
+              >Màu Sắc Nét Bút</label
+            >
+            <div class="flex gap-2.5">
+              <button
+                onclick="setInkColor('#ffffff')"
+                class="ink-color-btn w-6 h-6 rounded-full border-2 border-white ring-2 ring-brand-700 bg-white"
+                data-color="#ffffff"
+              ></button>
+              <button
+                onclick="setInkColor('#fde047')"
+                class="ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-yellow-300"
+                data-color="#fde047"
+              ></button>
+              <button
+                onclick="setInkColor('#60a5fa')"
+                class="ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-blue-400"
+                data-color="#60a5fa"
+              ></button>
+              <button
+                onclick="setInkColor('#f87171')"
+                class="ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-red-400"
+                data-color="#f87171"
+              ></button>
+              <button
+                onclick="setInkColor('#4ade80')"
+                class="ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-green-400"
+                data-color="#4ade80"
+              ></button>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-end gap-2.5"
+        >
+          <button
+            onclick="closeSignatureCanvasModal()"
+            class="px-4 py-2 border border-neutral-300 text-neutral-700 font-bold rounded-xl text-xs"
+          >
+            Hủy
+          </button>
+          <button
+            onclick="saveSignature()"
+            class="px-5 py-2.5 bg-brand-800 hover:bg-brand-900 text-white font-bold rounded-xl text-xs transition-all shadow"
+          >
+            Gửi Lên Bức Tường
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <div
+      id="upload-photo-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-premium"
+      >
+        <div
+          class="bg-brand-50 px-6 py-4 border-b border-brand-200 flex items-center justify-between"
+        >
+          <h4 class="font-serif text-lg font-bold text-brand-900">
+            <i class="fa-solid fa-cloud-arrow-up mr-2 text-brand-700"></i> Đăng
+            Tải Ảnh Kỷ Niệm
+          </h4>
+          <button
+            onclick="closeUploadPhotoModal()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-neutral-600 mb-1"
+              >Mô tả bức ảnh *</label
+            >
+            <input
+              type="text"
+              id="photo-caption"
+              required
+              placeholder="Ghi lại sự kiện..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-neutral-600 mb-1"
+              >Họ Tên Người Đăng *</label
+            >
+            <input
+              type="text"
+              id="photo-uploader"
+              required
+              placeholder="Tên thật của bạn..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-neutral-600 mb-1"
+              >Chọn Tệp Hình Ảnh *</label
+            >
+            <input
+              type="file"
+              id="photo-file"
+              accept="image/*"
+              class="w-full text-xs text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-100 file:text-brand-800 hover:file:bg-brand-200 cursor-pointer"
+            />
+          </div>
+          <div
+            id="upload-progress"
+            class="hidden text-xs text-brand-700 font-semibold animate-pulse text-center"
+          >
+            Đang giải nén và lưu trữ bức ảnh kỷ niệm...
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-end gap-2.5"
+        >
+          <button
+            onclick="closeUploadPhotoModal()"
+            class="px-4 py-2 border border-neutral-300 text-neutral-700 font-bold rounded-xl text-xs"
+          >
+            Hủy
+          </button>
+          <button
+            onclick="uploadPhoto()"
+            class="px-5 py-2.5 bg-brand-700 hover:bg-brand-800 text-white font-bold rounded-xl text-xs"
+          >
+            Đăng Tải
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <div
+      id="rules-modal"
+      class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-premium flex flex-col max-h-[90vh]"
+      >
+        <div
+          class="bg-red-50 px-6 py-4 border-b border-red-100 flex items-center justify-between"
+        >
+          <h4
+            class="font-serif text-lg font-bold text-red-800 flex items-center gap-2"
+          >
+            <i
+              class="fa-solid fa-triangle-exclamation text-red-600 animate-pulse"
+            ></i>
+            Sửa Lỗi Phân Quyền Firestore Database
+          </h4>
+          <button
+            onclick="closeRulesModal()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4 flex-1 overflow-y-auto">
+          <p class="text-xs text-neutral-600 leading-relaxed">
+            Hệ thống lưu trữ dữ liệu báo lỗi phân quyền
+            <code class="bg-red-100 text-red-700 px-1 rounded font-mono"
+              >Missing or insufficient permissions</code
+            >. Để mở khóa và kích hoạt mây đồng bộ, em hãy thực hiện các bước
+            cấu hình Rules đơn giản sau:
+          </p>
+          <ol
+            class="list-decimal list-inside text-xs text-neutral-700 space-y-2.5 font-medium"
+          >
+            <li>
+              Đăng nhập trang quản trị
+              <a
+                href="https://console.firebase.google.com/"
+                target="_blank"
+                class="text-brand-700 font-bold underline"
+                >Firebase Console</a
+              >.
+            </li>
+            <li>
+              Ở menu đứng bên trái màn hình, chọn mục
+              <strong>Firestore Database</strong>.
+            </li>
+            <li>Chọn thẻ <strong>Rules</strong> (Quy tắc) ở góc trên cùng.</li>
+            <li>
+              Sao chép toàn bộ mã quy tắc ở hộp phía dưới, xóa sạch mã cũ rồi
+              dán mã mới thay thế, sau đó nhấn <strong>Publish</strong>.
+            </li>
+          </ol>
+
+          <div class="space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-neutral-500"
+                >MÃ RULES PHÙ HỢP CẦN DÁN:</span
+              >
+              <button
+                onclick="copyRulesToClipboard()"
+                class="text-xs bg-brand-800 hover:bg-brand-900 text-white font-bold py-1 px-3 rounded-lg transition-all"
+              >
+                <i class="fa-regular fa-copy mr-1"></i> Sao chép quy tắc
+              </button>
+            </div>
+            <pre
+              id="rules-code-block"
+              class="bg-slate-900 text-emerald-400 p-4 rounded-xl text-[11px] font-mono overflow-x-auto leading-relaxed max-h-[220px]"
+            >
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /artifacts/{appId}/public/data/{document=**} {
+      allow read, write: if true;
+    }
+  }
+}</pre
+            >
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-end"
+        >
+          <button
+            onclick="closeRulesModal()"
+            class="px-5 py-2.5 bg-brand-800 hover:bg-brand-900 text-white font-bold rounded-xl text-xs transition-all"
+          >
+            Tôi Đã Hoàn Thành
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="confirm-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-2xl max-w-sm w-full overflow-hidden shadow-premium p-6 space-y-4"
+      >
+        <div class="flex items-center gap-3 text-brand-900">
+          <div
+            class="bg-brand-100 w-10 h-10 rounded-full flex items-center justify-center"
+          >
+            <i class="fa-solid fa-triangle-exclamation text-brand-700"></i>
+          </div>
+          <h4 class="font-serif text-lg font-bold">Xác Nhận Hành Động?</h4>
+        </div>
+        <p
+          id="confirm-message"
+          class="text-xs text-neutral-500 leading-relaxed"
+        >
+          Bạn có chắc chắn muốn thực hiện hành động này không?
+        </p>
+        <div class="flex items-center justify-end gap-2.5 pt-2">
+          <button
+            id="confirm-cancel-btn"
+            class="px-4 py-2 border border-neutral-200 text-neutral-600 rounded-xl text-xs font-bold hover:bg-neutral-50 transition-all"
+          >
+            Hủy
+          </button>
+          <button
+            id="confirm-ok-btn"
+            class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-xs transition-all shadow"
+          >
+            Đồng Ý
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+      // System wide navigation state
+      window.currentTab = "home";
+      window.isAdminActive = false;
+
+      // Local global state cache
+      window.allMemories = [];
+      window.allSignatures = [];
+      window.allMembers = [];
+      window.allTeachers = [];
+      window.allAchievements = [];
+      window.allPhotos = [];
+      window.allCapsules = [];
+
+      // Check if admin is authorized previously on this device
+      if (localStorage.getItem("isAdminDevice") === "true") {
+        window.isAdminActive = true;
+        document.addEventListener("DOMContentLoaded", () => {
+          document.getElementById("admin-badge").classList.remove("hidden");
+          document
+            .getElementById("admin-logout-btn")
+            .classList.remove("hidden");
+          revealAdminButtons();
+        });
+      }
+
+      // Navigation engine
+      window.switchTab = function (tabId) {
+        window.currentTab = tabId;
+
+        // Hide tabs
+        const contents = document.querySelectorAll(".tab-content");
+        contents.forEach((el) => el.classList.add("hidden"));
+
+        // Show current tab
+        const target = document.getElementById(`section-${tabId}`);
+        if (target) target.classList.remove("hidden");
+
+        // Reset tab designs
+        const btns = document.querySelectorAll(".tab-btn");
+        btns.forEach((btn) => {
+          btn.className =
+            "tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-all flex items-center gap-2";
+        });
+
+        // Set chosen navigation button active style
+        const activeBtn = document.getElementById(`tab-${tabId}`);
+        if (activeBtn) {
+          activeBtn.className =
+            "tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-brand-900 bg-white shadow-sm border border-brand-200/30 transition-all flex items-center gap-2";
+        }
+      };
+
+      // Custom UI notification banner
+      window.showCustomNotice = function (html) {
+        const wrap = document.createElement("div");
+        wrap.className =
+          "fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50 bg-neutral-900 text-white text-xs sm:text-sm font-medium py-3.5 px-6 rounded-2xl shadow-premium border border-neutral-800 flex items-center gap-2.5 transition-all duration-300 opacity-0 translate-y-3";
+        wrap.innerHTML = html;
+        document.body.appendChild(wrap);
+
+        setTimeout(() => {
+          wrap.classList.remove("opacity-0", "translate-y-3");
+        }, 10);
+        setTimeout(() => {
+          wrap.classList.add("opacity-0", "translate-y-3");
+          setTimeout(() => wrap.remove(), 300);
+        }, 3600);
+      };
+    </script>
+
+    <script>
+      // Handwriting canvas logic
+      let sigCanvas, sigCtx;
+      let isDrawing = false;
+      let lastX = 0;
+      let lastY = 0;
+      let inkColor = "#ffffff";
+
+      function initSignaturePad() {
+        sigCanvas = document.getElementById("signature-canvas");
+        if (!sigCanvas) return;
+        sigCtx = sigCanvas.getContext("2d");
+
+        recalculateCanvasSize();
+        window.addEventListener("resize", recalculateCanvasSize);
+
+        sigCtx.lineWidth = 3.5;
+        sigCtx.lineCap = "round";
+        sigCtx.lineJoin = "round";
+        sigCtx.strokeStyle = inkColor;
+
+        // PC Drawing listeners
+        sigCanvas.addEventListener("mousedown", (e) => {
+          isDrawing = true;
+          [lastX, lastY] = getCanvasCoords(e);
+        });
+        sigCanvas.addEventListener("mousemove", (e) => {
+          if (!isDrawing) return;
+          const [currX, currY] = getCanvasCoords(e);
+          sigCtx.beginPath();
+          sigCtx.moveTo(lastX, lastY);
+          sigCtx.lineTo(currX, currY);
+          sigCtx.stroke();
+          [lastX, lastY] = [currX, currY];
+        });
+        sigCanvas.addEventListener("mouseup", () => (isDrawing = false));
+        sigCanvas.addEventListener("mouseout", () => (isDrawing = false));
+
+        // Responsive Mobile/Tablet touch gesture listeners
+        sigCanvas.addEventListener("touchstart", (e) => {
+          isDrawing = true;
+          const touch = e.touches[0];
+          const rect = sigCanvas.getBoundingClientRect();
+          lastX = (touch.clientX - rect.left) * (sigCanvas.width / rect.width);
+          lastY = (touch.clientY - rect.top) * (sigCanvas.height / rect.height);
+          e.preventDefault();
+        });
+        sigCanvas.addEventListener("touchmove", (e) => {
+          if (!isDrawing) return;
+          const touch = e.touches[0];
+          const rect = sigCanvas.getBoundingClientRect();
+          const currX =
+            (touch.clientX - rect.left) * (sigCanvas.width / rect.width);
+          const currY =
+            (touch.clientY - rect.top) * (sigCanvas.height / rect.height);
+
+          sigCtx.beginPath();
+          sigCtx.moveTo(lastX, lastY);
+          sigCtx.lineTo(currX, currY);
+          sigCtx.stroke();
+          [lastX, lastY] = [currX, currY];
+          e.preventDefault();
+        });
+        sigCanvas.addEventListener("touchend", () => (isDrawing = false));
+      }
+
+      function recalculateCanvasSize() {
+        if (!sigCanvas) return;
+        const wrap = sigCanvas.parentElement;
+        sigCanvas.width = wrap.clientWidth;
+        sigCanvas.height = wrap.clientHeight;
+        if (sigCtx) {
+          sigCtx.lineWidth = 3.5;
+          sigCtx.lineCap = "round";
+          sigCtx.lineJoin = "round";
+          sigCtx.strokeStyle = inkColor;
+        }
+      }
+
+      function getCanvasCoords(e) {
+        const rect = sigCanvas.getBoundingClientRect();
+        const x = (e.clientX - rect.left) * (sigCanvas.width / rect.width);
+        const y = (e.clientY - rect.top) * (sigCanvas.height / rect.height);
+        return [x, y];
+      }
+
+      window.clearSignatureCanvas = function () {
+        if (sigCtx) sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+      };
+
+      window.setInkColor = function (color) {
+        inkColor = color;
+        if (sigCtx) sigCtx.strokeStyle = color;
+
+        const btns = document.querySelectorAll(".ink-color-btn");
+        btns.forEach((btn) => {
+          btn.className =
+            "ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-neutral-200";
+        });
+        event.currentTarget.className =
+          "ink-color-btn w-6 h-6 rounded-full border-2 border-white ring-2 ring-brand-700 bg-white";
+      };
+    </script>
+
+    <script>
+      // Immersive Time machine slides engine
+      let tmIndex = 0;
+      let tmAutoplayInterval = null;
+      let dustAnimationId = null;
+
+      window.startTimeMachine = function () {
+        if (window.allMemories.length === 0) {
+          window.showCustomNotice(
+            "⚠️ Lớp mình chưa đóng góp mẩu kỷ niệm nào để khởi chạy cỗ máy thời gian!",
+          );
+          return;
+        }
+        initSynthMusicContext();
+        document
+          .getElementById("time-machine-screen")
+          .classList.remove("hidden");
+        tmIndex = 0;
+        showTimeStep();
+        startTimeAutoplay();
+        startDustCanvas();
+      };
+
+      window.stopTimeMachine = function () {
+        document.getElementById("time-machine-screen").classList.add("hidden");
+        stopTimeAutoplay();
+        if (dustAnimationId) cancelAnimationFrame(dustAnimationId);
+      };
+
+      function showTimeStep() {
+        if (window.allMemories.length === 0) return;
+        if (tmIndex < 0) tmIndex = window.allMemories.length - 1;
+        if (tmIndex >= window.allMemories.length) tmIndex = 0;
+
+        const stage = document.getElementById("tm-stage");
+        if (!stage) return;
+        stage.className =
+          "max-w-3xl w-full text-center space-y-8 transform transition-all duration-700 opacity-0 scale-95";
+
+        setTimeout(() => {
+          const item = window.allMemories[tmIndex];
+
+          const periodLabels = {
+            "10-1":
+              "Năm Lớp 10 • Những ngày bỡ ngỡ đầu tiên bước chân vào trường",
+            "10-2": "Năm Lớp 10 • Thân quen lớp học, mến yêu thầy cô bạn bè",
+            "11-1": "Năm Lớp 11 • Sôi nổi phong trào, nhiệt huyết của tuổi trẻ",
+            "11-2":
+              "Năm Lớp 11 • Gắn bó keo sơn, quây quần mỗi giờ ra chơi dã ngoại",
+            "12-1": "Năm Lớp 12 • Tăng tốc thắp lửa hoài bão khát khao bay cao",
+            "12-2": "Năm Lớp 12 • Gấp gáp lo toan ôn tập mùa thi cử nghẹt thở",
+            "12-3":
+              "Cuối Lớp 12 • Tiếng ve sầu tốt nghiệp chia ly ngập nước mắt 🌸",
+          };
+
+          document.getElementById("tm-period-badge").innerText =
+            periodLabels[item.period] || "Mốc Kỷ Niệm";
+          document.getElementById("tm-emoji").innerText = item.emoji || "🌸";
+          document.getElementById("tm-text").innerText = `"${item.text}"`;
+          document.getElementById("tm-author").innerText = item.author;
+          document.getElementById("tm-meta").innerText =
+            `Thắp sáng dòng thời gian ngày: ${new Date(item.timestamp).toLocaleDateString("vi-VN")}`;
+          document.getElementById("tm-progress-indicator").innerText =
+            `${tmIndex + 1} / ${window.allMemories.length}`;
+
+          stage.className =
+            "max-w-3xl w-full text-center space-y-8 transform transition-all duration-700 opacity-100 scale-100";
+        }, 300);
+      }
+
+      window.nextTimeStep = function () {
+        resetTimeAutoplay();
+        tmIndex++;
+        showTimeStep();
+      };
+
+      window.prevTimeStep = function () {
+        resetTimeAutoplay();
+        tmIndex--;
+        showTimeStep();
+      };
+
+      function startTimeAutoplay() {
+        stopTimeAutoplay();
+        const icon = document.getElementById("tm-play-icon");
+        const text = document.getElementById("tm-play-text");
+        if (icon) icon.className = "fa-solid fa-pause";
+        if (text) text.innerText = "Tự động phát";
+
+        tmAutoplayInterval = setInterval(() => {
+          tmIndex++;
+          showTimeStep();
+        }, 8000);
+      }
+
+      function stopTimeAutoplay() {
+        if (tmAutoplayInterval) {
+          clearInterval(tmAutoplayInterval);
+          tmAutoplayInterval = null;
+        }
+        const icon = document.getElementById("tm-play-icon");
+        const text = document.getElementById("tm-play-text");
+        if (icon) icon.className = "fa-solid fa-play";
+        if (text) text.innerText = "Tạm dừng";
+      }
+
+      function resetTimeAutoplay() {
+        if (tmAutoplayInterval) startTimeAutoplay();
+      }
+
+      // Chalkboard dust effects in full screen cinema
+      function startDustCanvas() {
+        const canvas = document.getElementById("dust-canvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const list = [];
+        const count = 45;
+
+        class Particle {
+          constructor() {
+            this.reset();
+            this.y = Math.random() * canvas.height;
+          }
+          reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = -10;
+            this.size = Math.random() * 2 + 1;
+            this.speedY = Math.random() * 0.3 + 0.1;
+            this.speedX = Math.random() * 0.2 - 0.1;
+            this.color =
+              Math.random() > 0.4
+                ? "rgba(253, 243, 231, 0.2)"
+                : "rgba(232, 163, 109, 0.15)";
+          }
+          update() {
+            this.y += this.speedY;
+            this.x += this.speedX;
+            if (this.y > canvas.height || this.x < 0 || this.x > canvas.width)
+              this.reset();
+          }
+          draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+          }
+        }
+
+        for (let i = 0; i < count; i++) list.push(new Particle());
+
+        function tick() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          list.forEach((p) => {
+            p.update();
+            p.draw();
+          });
+          dustAnimationId = requestAnimationFrame(tick);
+        }
+        tick();
+      }
+
+      // Web Audio Synthesizer sound generator
+      let audioCtx = null;
+      let isPlaying = false;
+      let seqInterval = null;
+      let globalGainNode = null;
+
+      function initSynthMusicContext() {
+        if (audioCtx) return;
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        globalGainNode = audioCtx.createGain();
+        globalGainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        globalGainNode.connect(audioCtx.destination);
+      }
+
+      function playSynthArpeggios() {
+        initSynthMusicContext();
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+
+        const progressions = [
+          { root: 130.81, third: 164.81, fifth: 196.0, seventh: 246.94 }, // Cmaj7
+          { root: 110.0, third: 130.81, fifth: 164.81, seventh: 220.0 }, // Amin7
+          { root: 87.31, third: 110.0, fifth: 130.81, seventh: 174.61 }, // Fmaj7
+          { root: 98.0, third: 123.47, fifth: 146.83, seventh: 196.0 }, // G7
+        ];
+
+        let index = 0;
+
+        function triggerChord(chord) {
+          if (!audioCtx) return;
+          const now = audioCtx.currentTime;
+          const frequencies = [
+            chord.root,
+            chord.third,
+            chord.fifth,
+            chord.seventh,
+          ];
+
+          frequencies.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = idx === 0 ? "sine" : "triangle";
+            osc.frequency.setValueAtTime(freq * 2, now + idx * 0.15);
+
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.04, now + idx * 0.15 + 0.3);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 4.2);
+
+            osc.connect(gain);
+            gain.connect(globalGainNode);
+
+            osc.start(now + idx * 0.15);
+            osc.stop(now + 4.5);
+          });
+        }
+
+        triggerChord(progressions[index]);
+        index = (index + 1) % progressions.length;
+
+        seqInterval = setInterval(() => {
+          triggerChord(progressions[index]);
+          index = (index + 1) % progressions.length;
+        }, 3800);
+      }
+
+      window.toggleSynthMusic = function () {
+        const btn = document.getElementById("music-trigger");
+        const icon = document.getElementById("music-icon");
+
+        if (isPlaying) {
+          clearInterval(seqInterval);
+          seqInterval = null;
+          isPlaying = false;
+          if (icon) icon.className = "fa-solid fa-play";
+          if (btn)
+            btn.className =
+              "bg-brand-700 hover:bg-brand-800 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow transition-all";
+        } else {
+          playSynthArpeggios();
+          isPlaying = true;
+          if (icon) icon.className = "fa-solid fa-pause";
+          if (btn)
+            btn.className =
+              "bg-brand-100 hover:bg-brand-200 text-brand-800 w-9 h-9 rounded-xl flex items-center justify-center shadow transition-all border border-brand-300";
+        }
+      };
+
+      window.adjustVolume = function (val) {
+        initSynthMusicContext();
+        if (globalGainNode) {
+          globalGainNode.gain.setValueAtTime(val / 300, audioCtx.currentTime);
+        }
+      };
+    </script>
+
+    <script>
+      // Modal controllers helper engine
+      window.openAdminModal = function () {
+        document.getElementById("admin-modal").classList.remove("hidden");
+      };
+
+      window.closeAdminModal = function () {
+        document.getElementById("admin-modal").classList.add("hidden");
+        document.getElementById("admin-passcode").value = "";
+        document.getElementById("admin-message").classList.add("hidden");
+      };
+
+      window.openSignatureCanvasModal = function () {
+        document.getElementById("sig-modal").classList.remove("hidden");
+        setTimeout(initSignaturePad, 60);
+      };
+
+      window.closeSignatureCanvasModal = function () {
+        document.getElementById("sig-modal").classList.add("hidden");
+        document.getElementById("sig-owner").value = "";
+        document.getElementById("sig-quote").value = "";
+        clearSignatureCanvas();
+      };
+
+      window.openUploadPhotoModal = function () {
+        document
+          .getElementById("upload-photo-modal")
+          .classList.remove("hidden");
+      };
+
+      window.closeUploadPhotoModal = function () {
+        document.getElementById("upload-photo-modal").classList.add("hidden");
+        document.getElementById("photo-caption").value = "";
+        document.getElementById("photo-uploader").value = "";
+        document.getElementById("photo-file").value = "";
+        document.getElementById("upload-progress").classList.add("hidden");
+      };
+
+      window.openRulesModal = function () {
+        document.getElementById("rules-modal").classList.remove("hidden");
+      };
+
+      window.closeRulesModal = function () {
+        document.getElementById("rules-modal").classList.add("hidden");
+      };
+
+      // Custom confirm dialogue
+      let confirmSuccessCallback = null;
+      window.openConfirmModal = function (message, onSuccess) {
+        document.getElementById("confirm-message").innerText = message;
+        document.getElementById("confirm-modal").classList.remove("hidden");
+        confirmSuccessCallback = onSuccess;
+      };
+
+      window.closeConfirmModal = function () {
+        document.getElementById("confirm-modal").classList.add("hidden");
+        confirmSuccessCallback = null;
+      };
+
+      document
+        .getElementById("confirm-cancel-btn")
+        .addEventListener("click", closeConfirmModal);
+      document
+        .getElementById("confirm-ok-btn")
+        .addEventListener("click", () => {
+          if (confirmSuccessCallback) confirmSuccessCallback();
+          closeConfirmModal();
+        });
+    </script>
+
+    <script type="module">
+      import { runFirebaseInit } from "./firebase-init.js";
+      runFirebaseInit();
+    </script>
+
+    
+    <div
+      id="member-slots-widget"
+      class="fixed top-24 right-4 z-40 max-w-[240px] w-full bg-white/95 backdrop-blur border border-brand-300 p-4 rounded-2xl shadow-premium transition-all duration-300"
+    >
+      <div
+        class="flex items-center justify-between mb-2 pb-1 border-b border-brand-100"
+      >
+        <h5
+          class="text-xs font-bold text-brand-900 uppercase tracking-wider flex items-center gap-1.5"
+        >
+          <i class="fa-solid fa-id-badge text-brand-700"></i> Số đại diện của
+          bạn
+        </h5>
+        <span
+          id="current-slot-badge"
+          class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md"
+          >Chưa chọn</span
+        >
+      </div>
+      <p class="text-[10px] text-neutral-500 mb-3 leading-tight">
+        Bạn bắt buộc phải chọn 1 số đại diện (0-51) để mở khóa quyền điền dữ
+        liệu.
+      </p>
+
+      <div
+        id="slots-container"
+        class="grid grid-cols-5 gap-1 max-h-40 overflow-y-auto pr-1"
+      ></div>
+    </div>
+      <div
+        class="bg-white border border-brand-200 rounded-2xl max-w-sm w-full p-6 shadow-premium space-y-4"
+      >
+        <h4 class="font-serif text-lg font-bold text-brand-900">
+          Xác Nhận Số Thành Viên
+        </h4>
+        <p class="text-xs text-neutral-600 leading-relaxed">
+          Bạn đang chọn số
+          <span
+            id="target-slot-number"
+            class="font-bold text-brand-700 text-sm"
+          ></span>
+          đại diện cho tài khoản của mình. Số này sẽ ẩn đi đối với mọi người sau
+          khi xác nhận thành công.
+        </p>
+        <div>
+          <label class="block text-xs font-bold text-neutral-700 mb-1"
+            >Tên hoặc biệt danh của bạn *</label
+          >
+          <input
+            type="text"
+            id="slot-member-name"
+            placeholder="Nhập tên để lớp mình nhận diện..."
+            class="w-full bg-brand-50 border border-brand-200 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+          />
+        </div>
+        <div class="flex justify-end gap-2 pt-1">
+          <button
+            onclick="closeClaimSlotModal()"
+            class="px-4 py-2 text-xs font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            Hủy
+          </button>
+          <button
+            onclick="confirmClaimSlot()"
+            class="px-4 py-2 text-xs font-bold text-white bg-brand-700 hover:bg-brand-800 rounded-xl shadow"
+          >
+            Xác nhận chọn
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { runFirebaseInit } from "./firebase-init.js";
+      runFirebaseInit();
+    </script>
+    <div id="slots-component-placeholder"></div>
+   <div id="slots-component-placeholder"></div>
+    <script>
+      async function loadSlotsComponent() {
+        try {
+          // GỌI CHÍNH XÁC ĐẾN FILE member.html MÀ BẠN ĐÃ TẢI LÊN
+          const response = await fetch("./member.html");
+          if (response.ok) {
+            document.getElementById("slots-component-placeholder").innerHTML = await response.text();
+            window.dispatchEvent(new Event("slotsComponentReady"));
+          } else {
+            console.error("Không thể tải tệp mã nguồn thành phần member.html");
+          }
+        } catch (error) {
+          console.error("Lỗi kết nối thành phần chọn số:", error);
+        }
+      }
+      loadSlotsComponent();
+    </script>
+    <script type="module" src="script.js"></script>
+  </body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trạm Dừng Thanh Xuân - Hệ Sinh Thái Kỷ Niệm Số</title>
+
+    <!-- Tailwind CSS for modern fluid visual system -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons for rich user interface symbols -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <!-- Google Fonts: Inter & Playfair Display for premium typography harmony -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+              serif: ["Playfair Display", "serif"],
+            },
+            colors: {
+              brand: {
+                50: "#fffbf7",
+                100: "#fdf3e7",
+                200: "#f9e2c9",
+                300: "#f3c79f",
+                400: "#e8a36d",
+                700: "#bc5b1a",
+                800: "#944111",
+                900: "#642907",
+              },
+              sand: {
+                50: "#faf9f5",
+                100: "#f4f1e8",
+                200: "#e5dec9",
+                800: "#4c4738",
+              },
+            },
+            boxShadow: {
+              premium: "0 10px 30px -10px rgba(148, 65, 17, 0.15)",
+              glow: "0 0 20px rgba(232, 163, 109, 0.4)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #fdf3e7;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #f3c79f;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #e8a36d;
+      }
+
+      .glass-panel {
+        background: rgba(255, 251, 247, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(243, 199, 159, 0.4);
+      }
+
+      .polaroid {
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .polaroid:hover {
+        transform: translateY(-8px) rotate(1deg) scale(1.02);
+        box-shadow: 0 25px 40px rgba(148, 65, 17, 0.15);
+      }
+
+      .chalkboard {
+        background-color: #1a231f;
+        background-image:
+          radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0),
+          radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+        background-size: 16px 16px;
+        background-position:
+          0 0,
+          8px 8px;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-brand-50 text-neutral-800 font-sans min-h-screen selection:bg-brand-200 selection:text-brand-900 overflow-x-hidden antialiased"
+  >
+    <header
+      class="sticky top-0 z-40 glass-panel border-b border-brand-200 px-4 py-3.5 shadow-sm"
+    >
+      <div
+        class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4"
+      >
+        <div
+          class="flex items-center gap-3.5 cursor-pointer"
+          onclick="switchTab('home')"
+        >
+          <div
+            class="bg-gradient-to-br from-brand-700 to-brand-900 text-white w-11 h-11 rounded-2xl flex items-center justify-center shadow-premium transform hover:rotate-6 transition-all"
+          >
+            <i class="fa-solid fa-graduation-cap text-xl"></i>
+          </div>
+          <div>
+            <h1
+              class="font-serif font-bold text-xl md:text-2xl text-brand-900 tracking-wide"
+            >
+              Trạm Dừng Thanh Xuân
+            </h1>
+            <p
+              class="text-[10px] text-brand-700 tracking-widest font-bold uppercase"
+            >
+              Hệ sinh thái lưu giữ ký ức số niên khoá cấp ba
+            </p>
+          </div>
+        </div>
+
+        <!-- Tab controllers -->
+        <div
+          class="flex flex-wrap items-center justify-center gap-1.5 bg-brand-100/60 p-1 rounded-2xl border border-brand-200/50"
+        >
+          <button
+            onclick="switchTab('home')"
+            id="tab-home"
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-brand-900 bg-white shadow-sm border border-brand-200/30 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-school text-brand-700"></i>Home
+          </button>
+          <button
+            onclick="switchTab('memories')"
+            id="tab-memories"
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-book-open"></i>Kỷ Niệm
+          </button>
+          <button
+            onclick="switchTab('signatures')"
+            id="tab-signatures"
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-signature"></i>Nét Bút Chữ Ký
+          </button>
+          <button
+            onclick="switchTab('gallery')"
+            id="tab-gallery"
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-images"></i>Thư Viện Ảnh
+          </button>
+          <button
+            onclick="switchTab('capsule')"
+            id="tab-capsule"
+            class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-box-archive"></i>Hộp Tương Lai
+          </button>
+        </div>
+
+        <!-- Dynamic tools: Time machine trigger & Admin control portal -->
+        <div class="flex items-center gap-2">
+          <button
+            onclick="startTimeMachine()"
+            class="px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-brand-700 to-brand-800 hover:from-brand-800 hover:to-brand-900 shadow-premium hover:shadow-glow transform hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center gap-2"
+          >
+            <i class="fa-solid fa-hourglass-half"></i> Du Hành Ký Ức
+          </button>
+          <button
+            onclick="openAdminModal()"
+            class="p-2.5 rounded-xl text-neutral-500 hover:text-brand-700 hover:bg-white/80 transition-all relative border border-transparent hover:border-brand-200/50"
+            title="Cài đặt hệ thống"
+          >
+            <i class="fa-solid fa-gears text-base"></i>
+            <span
+              id="admin-badge"
+              class="hidden absolute top-1 right-1 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white"
+            ></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MUSIC PLAYER WIDGET -->
+    <div class="fixed bottom-6 right-6 z-40">
+      <div
+        id="music-player-panel"
+        class="bg-white/95 border border-brand-200 p-3 rounded-2xl shadow-premium flex items-center gap-4 transition-all duration-300 transform scale-95 origin-bottom-right hover:scale-100 group"
+      >
+        <div class="flex items-center gap-2.5">
+          <button
+            id="music-trigger"
+            onclick="toggleSynthMusic()"
+            class="bg-brand-700 hover:bg-brand-800 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow transition-all active:scale-95"
+          >
+            <i class="fa-solid fa-play" id="music-icon"></i>
+          </button>
+          <div class="text-left select-none pr-2">
+            <p
+              class="text-[10px] font-bold text-brand-700 tracking-wider uppercase"
+            >
+              Giai Điệu Thư Thái
+            </p>
+            <p
+              class="text-xs font-semibold text-neutral-700 truncate max-w-[100px]"
+              id="current-track-name"
+            >
+              Nostalgia piano
+            </p>
+          </div>
+        </div>
+        <div
+          class="hidden sm:flex items-center gap-2 border-l border-brand-100 pl-3"
+        >
+          <i class="fa-solid fa-volume-low text-neutral-400 text-xs"></i>
+          <input
+            type="range"
+            id="synth-volume"
+            min="0"
+            max="100"
+            value="30"
+            oninput="adjustVolume(this.value)"
+            class="w-16 h-1 bg-brand-200 rounded-lg appearance-none cursor-pointer accent-brand-700"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN CONTAINER FRAME -->
+    <main class="max-w-7xl mx-auto px-4 py-6 relative">
+      <!-- REAL-TIME CLOUD SYNC DIAGNOSTIC BAR -->
+      <div
+        id="sync-status"
+        class="mb-6 text-xs flex flex-wrap items-center justify-between gap-3 p-3 bg-white/60 backdrop-blur border border-brand-200/50 rounded-2xl shadow-sm"
+      >
+        <div class="flex items-center gap-2.5">
+          <span
+            id="status-dot"
+            class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"
+          ></span>
+          <span id="status-text" class="text-neutral-600 font-medium"
+            >Đang thiết lập kết nối lưu trữ đám mây thời gian thực...</span
+          >
+        </div>
+        <button
+          id="rule-guide-btn"
+          onclick="openRulesModal()"
+          class="hidden text-[10px] bg-red-50 hover:bg-red-100 text-red-700 font-bold py-1.5 px-3 rounded-lg transition-all border border-red-200/50"
+        >
+          <i class="fa-solid fa-circle-exclamation mr-1"></i> Khắc Phục Lỗi Kết
+          Nối Đám Mây
+        </button>
+      </div>
+
+      <!-- 1. HOME TAB (CỔNG TRƯỜNG THANH XUÂN) -->
+      <div
+        id="section-home"
+        class="tab-content space-y-12 transition-all duration-300"
+      >
+        <!-- Hero Cinema Banner of the Class -->
+        <div
+          class="relative bg-gradient-to-br from-brand-900 to-neutral-900 rounded-3xl p-8 md:p-14 text-white overflow-hidden shadow-premium"
+        >
+          <div
+            class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-brand-400/20 via-transparent to-transparent opacity-80"
+          ></div>
+          <div
+            class="absolute -right-10 -bottom-10 opacity-5 w-80 h-80 border-8 border-dashed border-white rounded-full"
+          ></div>
+
+          <div class="relative z-10 max-w-3xl space-y-4">
+            <span
+              class="bg-white/10 text-brand-200 text-xs font-bold px-3 py-1.5 rounded-xl uppercase tracking-widest border border-white/15"
+              >Mái Trường Mến Yêu</span
+            >
+            <h2
+              class="font-serif text-3xl md:text-5xl font-bold mt-2 leading-tight"
+            >
+              Thời gian có thể trôi qua,<br />Kỷ niệm sẽ được giữ lại.
+            </h2>
+            <p
+              class="text-brand-100 text-sm md:text-base leading-relaxed font-light"
+            >
+              Chào mừng bạn bước qua cánh cửa thời gian. Đây là nơi lưu lại danh
+              sách thành viên của lớp học, bảng vàng thành tích lừng lẫy, những
+              bức thư gửi cho tương lai, và bức tường ký tên mộc mạc lưu lại
+              đúng nét vẽ tay của tuổi mười bảy thanh xuân.
+            </p>
+            <div class="flex items-center gap-6 pt-2">
+              <div class="text-center">
+                <span
+                  class="block text-2xl md:text-3xl font-bold font-serif text-brand-300"
+                  id="cnt-members"
+                  >0</span
+                >
+                <span
+                  class="text-[10px] text-brand-200 font-medium uppercase tracking-wider"
+                  >Thành viên lớp</span
+                >
+              </div>
+              <div class="w-px h-8 bg-white/20"></div>
+              <div class="text-center">
+                <span
+                  class="block text-2xl md:text-3xl font-bold font-serif text-brand-300"
+                  id="cnt-teachers"
+                  >0</span
+                >
+                <span
+                  class="text-[10px] text-brand-200 font-medium uppercase tracking-wider"
+                  >Người đưa đò</span
+                >
+              </div>
+              <div class="w-px h-8 bg-white/20"></div>
+              <div class="text-center">
+                <span
+                  class="block text-2xl md:text-3xl font-bold font-serif text-brand-300"
+                  id="cnt-memories"
+                  >0</span
+                >
+                <span
+                  class="text-[10px] text-brand-200 font-medium uppercase tracking-wider"
+                  >Kỷ niệm viết</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE MEMBERS GRID -->
+        <section class="space-y-6">
+          <div
+            class="flex items-end justify-between border-b border-brand-200/50 pb-3"
+          >
+            <div class="space-y-1">
+              <h3
+                class="font-serif text-2xl md:text-3xl font-bold text-brand-900 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-users text-brand-700"></i> Thành Viên Lớp
+                Mình
+              </h3>
+              <p class="text-xs text-neutral-500">
+                Mỗi cá nhân là một mảng màu rực rỡ dệt nên bức tranh chung
+              </p>
+            </div>
+            <button
+              id="admin-add-member-btn"
+              onclick="openMemberEditor()"
+              class="hidden text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-premium transition-all"
+            >
+              <i class="fa-solid fa-user-plus mr-1.5"></i>Thêm Thành Viên
+            </button>
+          </div>
+
+          <div
+            id="students-grid"
+            class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+          >
+            <div class="col-span-full py-12 text-center text-neutral-400">
+              <i
+                class="fa-solid fa-spinner animate-spin text-3xl mb-3 text-brand-400"
+              ></i>
+              <p class="text-xs">Đang tải hồ sơ thành viên...</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- BELOVED TEACHERS SECTION -->
+        <section class="space-y-6">
+          <div
+            class="flex items-end justify-between border-b border-brand-200/50 pb-3"
+          >
+            <div class="space-y-1">
+              <h3
+                class="font-serif text-2xl md:text-3xl font-bold text-brand-900 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-chalkboard-user text-brand-700"></i> Người
+                Đưa Đò Tâm Huyết
+              </h3>
+              <p class="text-xs text-neutral-500">
+                Tri ân sâu sắc những người thầy người cô đã dạy dỗ suốt 3 năm
+              </p>
+            </div>
+            <button
+              id="admin-add-teacher-btn"
+              onclick="openTeacherEditor()"
+              class="hidden text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-premium transition-all"
+            >
+              <i class="fa-solid fa-plus mr-1.5"></i>Thêm Thầy/Cô
+            </button>
+          </div>
+
+          <div id="teachers-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="col-span-full text-center py-6 text-neutral-400">
+              Đang khởi tạo danh sách giáo viên...
+            </div>
+          </div>
+        </section>
+
+        <!-- ACHIEVEMENTS TIMELINE SECTION -->
+        <section class="space-y-6">
+          <div
+            class="flex items-end justify-between border-b border-brand-200/50 pb-3"
+          >
+            <div class="space-y-1">
+              <h3
+                class="font-serif text-2xl md:text-3xl font-bold text-brand-900 flex items-center gap-2"
+              >
+                <i class="fa-solid fa-award text-brand-700"></i> Bảng Vàng Thành
+                Tích 3 Năm
+              </h3>
+              <p class="text-xs text-neutral-500">
+                Những cột mốc huy hoàng tập thể lớp đã đồng hành chinh phục
+              </p>
+            </div>
+            <button
+              id="admin-add-achievement-btn"
+              onclick="openAchievementEditor()"
+              class="hidden text-xs bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-premium transition-all"
+            >
+              <i class="fa-solid fa-plus mr-1.5"></i>Thêm Thành Tích
+            </button>
+          </div>
+
+          <div id="achievements-timeline" class="space-y-4">
+            <div class="text-center py-6 text-neutral-400">
+              Đang chuẩn bị bảng thành tích học đường...
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- 2. MEMORIES JOURNAL TAB -->
+      <div
+        id="section-memories"
+        class="tab-content hidden space-y-8 transition-all duration-300"
+      >
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <!-- Submit memory card form -->
+          <div
+            class="bg-white border border-brand-200/60 rounded-2xl p-6 shadow-sm h-fit sticky top-24"
+          >
+            <h4
+              class="font-serif text-xl font-bold text-brand-900 mb-1.5 flex items-center gap-2"
+            >
+              <i class="fa-solid fa-pen-nib text-brand-700"></i> Góp Nhặt Kỷ
+              Niệm
+            </h4>
+            <p class="text-xs text-neutral-500 mb-6">
+              Mỗi mẩu chuyện bạn viết xuống sẽ ngay lập tức được dệt vào Cỗ Máy
+              Thời Gian chung.
+            </p>
+
+            <form
+              id="memory-form"
+              onsubmit="submitMemory(event)"
+              class="space-y-4"
+            >
+              <div>
+                <label
+                  class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1"
+                  >Tên của bạn *</label
+                >
+                <input
+                  type="text"
+                  id="memory-author"
+                  required
+                  placeholder="Ví dụ: Hoàng Nam, Ly Ly..."
+                  class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none transition-all"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1"
+                  >Mốc Thời Gian *</label
+                >
+                <select
+                  id="memory-period"
+                  required
+                  class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none transition-all cursor-pointer"
+                >
+                  <option value="10-1">
+                    Lớp 10 - Học Kỳ 1 (Bỡ ngỡ gặp gỡ)
+                  </option>
+                  <option value="10-2">
+                    Lớp 10 - Học Kỳ 2 (Quen trường mến bạn)
+                  </option>
+                  <option value="11-1">
+                    Lớp 11 - Học Kỳ 1 (Sôi nổi phong trào)
+                  </option>
+                  <option value="11-2">
+                    Lớp 11 - Học Kỳ 2 (Gắn bó keo sơn)
+                  </option>
+                  <option value="12-1">
+                    Lớp 12 - Học Kỳ 1 (Bắt đầu tăng tốc)
+                  </option>
+                  <option value="12-2">
+                    Lớp 12 - Học Kỳ 2 (Gấp gáp mùa thi)
+                  </option>
+                  <option value="12-3">
+                    Lớp 12 - Ngày Chia Ly (Mùa phượng đỏ cuối cùng)
+                  </option>
+                </select>
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1"
+                  >Kỷ niệm muốn sẻ chia *</label
+                >
+                <textarea
+                  id="memory-text"
+                  required
+                  rows="5"
+                  placeholder="Viết dòng hồi ức chân thực, những trò nghịch dợm hay lời xin lỗi chưa kịp nói..."
+                  class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none resize-none transition-all"
+                ></textarea>
+              </div>
+              <div>
+                <label
+                  class="block text-xs font-bold text-neutral-600 uppercase tracking-wider mb-1"
+                  >Biểu tượng cảm xúc (Emoji)</label
+                >
+                <input
+                  type="text"
+                  id="memory-emoji"
+                  placeholder="Ví dụ: 🌸, 🎒, 📝, 😭, ✏️, ⚽"
+                  class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none transition-all"
+                />
+              </div>
+              <button
+                type="submit"
+                class="w-full py-3 bg-brand-700 hover:bg-brand-800 text-white font-bold rounded-xl text-sm transition-all shadow-premium hover:shadow-glow flex items-center justify-center gap-2"
+              >
+                <i class="fa-solid fa-paper-plane"></i> Gửi Gắm Lưu Bút
+              </button>
+            </form>
+          </div>
+
+          <div class="lg:col-span-2 space-y-6">
+            <div class="flex items-center justify-between">
+              <h4 class="font-serif text-2xl font-bold text-brand-900">
+                Nhật Ký Thời Gian Lớp Mình
+              </h4>
+              <span
+                id="memories-count"
+                class="bg-brand-200 text-brand-900 text-xs font-bold px-3 py-1 rounded-full"
+                >0 kỷ niệm</span
+              >
+            </div>
+
+            <!-- Filter chips -->
+            <div class="flex flex-wrap gap-2 py-1">
+              <button
+                onclick="filterMemories('all')"
+                class="filter-chip px-4 py-2 rounded-full text-xs font-semibold bg-brand-700 text-white transition-all shadow-sm"
+              >
+                Tất cả
+              </button>
+              <button
+                onclick="filterMemories('10')"
+                class="filter-chip px-4 py-2 rounded-full text-xs font-semibold bg-white text-neutral-600 border border-brand-200 hover:bg-brand-100 transition-all"
+              >
+                Năm Lớp 10
+              </button>
+              <button
+                onclick="filterMemories('11')"
+                class="filter-chip px-4 py-2 rounded-full text-xs font-semibold bg-white text-neutral-600 border border-brand-200 hover:bg-brand-100 transition-all"
+              >
+                Năm Lớp 11
+              </button>
+              <button
+                onclick="filterMemories('12')"
+                class="filter-chip px-4 py-2 rounded-full text-xs font-semibold bg-white text-neutral-600 border border-brand-200 hover:bg-brand-100 transition-all"
+              >
+                Năm Lớp 12
+              </button>
+            </div>
+
+            <div id="memories-feed" class="space-y-4">
+              <div class="text-center py-12 text-neutral-400">
+                <i
+                  class="fa-solid fa-spinner animate-spin text-3xl mb-3 text-brand-400"
+                ></i>
+                <p class="text-xs">Đang đồng bộ dòng thời gian niên khoá...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. SIGNATURES WALL TAB -->
+      <div
+        id="section-signatures"
+        class="tab-content hidden space-y-8 transition-all duration-300"
+      >
+        <div class="text-center max-w-2xl mx-auto space-y-3">
+          <h3 class="font-serif text-3xl font-bold text-brand-900">
+            Bức Tường Chữ Ký Học Sinh
+          </h3>
+          <p class="text-sm text-neutral-500 leading-relaxed">
+            Sử dụng chuột trên máy tính hoặc ngón tay vẽ trên điện thoại để để
+            lại nét chữ mộc mạc lưu dấu mãi về sau.
+          </p>
+          <button
+            onclick="openSignatureCanvasModal()"
+            class="inline-flex items-center gap-2 bg-brand-800 hover:bg-brand-950 text-white font-bold py-3 px-6 rounded-2xl shadow-premium hover:shadow-glow transition-all transform hover:-translate-y-0.5"
+          >
+            <i class="fa-solid fa-signature"></i> Đặt Bút Lưu Chữ Ký Ngay
+          </button>
+        </div>
+
+        <div class="border-t border-brand-200/50 pt-8">
+          <div class="flex items-center justify-between mb-6">
+            <h4 class="font-serif text-xl font-bold text-brand-900">
+              <i class="fa-solid fa-images text-brand-700"></i> Nét Chữ Mộc Mạc
+              Còn Mãi
+            </h4>
+            <span
+              id="signatures-count"
+              class="bg-brand-200 text-brand-900 text-xs font-bold px-3 py-1 rounded-full"
+              >0 chữ ký</span
+            >
+          </div>
+
+          <div
+            id="signatures-grid"
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+          >
+            <div class="col-span-full py-12 text-center text-neutral-400">
+              <i
+                class="fa-solid fa-spinner animate-spin text-3xl mb-3 text-brand-400"
+              ></i>
+              <p class="text-xs">Đang tải bức tường gỗ chữ ký...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. PHOTO GALLERY TAB -->
+      <div
+        id="section-gallery"
+        class="tab-content hidden space-y-8 transition-all duration-300"
+      >
+        <div
+          class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-brand-200/50 pb-4"
+        >
+          <div class="space-y-1">
+            <h3
+              class="font-serif text-2xl md:text-3xl font-bold text-brand-900"
+            >
+              <i class="fa-solid fa-camera-retro text-brand-700"></i> Thư Viện
+              Khoảnh Khắc Học Trò
+            </h3>
+            <p class="text-xs text-neutral-500">
+              Nơi những nụ cười, bóng lưng và khoảnh khắc tập thể được lưu giữ
+            </p>
+          </div>
+          <button
+            onclick="openUploadPhotoModal()"
+            class="bg-brand-700 hover:bg-brand-800 text-white font-bold py-2.5 px-4 rounded-xl shadow-premium text-xs transition-all flex items-center gap-1.5"
+          >
+            <i class="fa-solid fa-cloud-arrow-up"></i> Gửi Ảnh Kỷ Niệm
+          </button>
+        </div>
+
+        <div
+          id="photos-grid"
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+        >
+          <div class="col-span-full text-center py-12 text-neutral-400">
+            <i
+              class="fa-solid fa-spinner animate-spin text-3xl mb-3 text-brand-400"
+            ></i>
+            <p class="text-xs">Đang mở khoá album ảnh chung...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. TIME CAPSULE TAB -->
+      <div
+        id="section-capsule"
+        class="tab-content hidden space-y-8 transition-all duration-300"
+      >
+        <div class="max-w-4xl mx-auto space-y-8">
+          <div class="text-center space-y-3">
+            <h3 class="font-serif text-3xl font-bold text-brand-900">
+              <i class="fa-solid fa-box-archive text-brand-700"></i> Hộp Thư Gửi
+              Tương Lai
+            </h3>
+            <p
+              class="text-sm text-neutral-500 max-w-xl mx-auto leading-relaxed"
+            >
+              Hãy viết một lá thư gửi tới chính mình hoặc tập thể lớp của nhiều
+              năm về sau. Hệ thống sẽ khoá chặt và chỉ cho phép mở khoá đúng
+              thời gian bạn mong muốn.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+            <!-- Letter Form -->
+            <div
+              class="bg-white border border-brand-200/60 p-6 rounded-2xl shadow-sm md:col-span-5 space-y-4"
+            >
+              <h4
+                class="font-bold text-neutral-800 text-sm uppercase tracking-wider border-b border-brand-100 pb-2"
+              >
+                Gieo Mầm Tương Lai
+              </h4>
+              <form
+                id="capsule-form"
+                onsubmit="submitCapsule(event)"
+                class="space-y-4"
+              >
+                <div>
+                  <label class="block text-xs font-bold text-neutral-600 mb-1"
+                    >Họ Tên Của Bạn *</label
+                  >
+                  <input
+                    type="text"
+                    id="capsule-author"
+                    required
+                    placeholder="Nhập tên thật..."
+                    class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none transition-all"
+                  />
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-neutral-600 mb-1"
+                    >Thời Gian Niêm Phong *</label
+                  >
+                  <select
+                    id="capsule-duration"
+                    required
+                    class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2 px-3 text-sm outline-none transition-all cursor-pointer"
+                  >
+                    <option value="1">1 Năm (Khi mới lên đại học)</option>
+                    <option value="3">3 Năm (Quãng giữa đại học)</option>
+                    <option value="5">5 Năm (Khi đã ra trường đi làm)</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs font-bold text-neutral-600 mb-1"
+                    >Nội dung thư gửi bản thân *</label
+                  >
+                  <textarea
+                    id="capsule-message"
+                    required
+                    rows="6"
+                    placeholder="Ước mơ lớn nhất của bạn bây giờ là gì? Cậu muốn nhắn gửi gì cho cậu của tương lai?..."
+                    class="w-full bg-brand-50 border border-brand-200/50 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-xl py-2.5 px-3 text-sm outline-none resize-none transition-all"
+                  ></textarea>
+                </div>
+                <button
+                  type="submit"
+                  class="w-full py-3 bg-neutral-900 hover:bg-neutral-800 text-white font-bold rounded-xl text-sm transition-all shadow-premium flex items-center justify-center gap-2"
+                >
+                  <i class="fa-solid fa-lock"></i> Niêm Phong & Gửi Đi
+                </button>
+              </form>
+            </div>
+
+            <!-- Locks list -->
+            <div class="md:col-span-7 space-y-4">
+              <h4
+                class="font-bold text-neutral-800 text-sm uppercase tracking-wider border-b border-brand-100 pb-2"
+              >
+                Hộp Thư Đang Khoá
+              </h4>
+              <div
+                id="capsules-list"
+                class="grid grid-cols-1 sm:grid-cols-2 gap-4"
+              >
+                <div class="col-span-full text-center py-8 text-neutral-400">
+                  Đang quét hòm thư niêm phong...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- FULLSCREEN CINEMATIC TIME MACHINE SCREEN -->
+    <div
+      id="time-machine-screen"
+      class="fixed inset-0 z-50 bg-neutral-950 text-white hidden flex-col transition-all duration-500"
+    >
+      <!-- Floating canvas for dust and memories -->
+      <canvas
+        id="dust-canvas"
+        class="absolute inset-0 pointer-events-none opacity-40"
+      ></canvas>
+
+      <!-- Time machine header controls -->
+      <div
+        class="relative z-10 px-6 py-4 flex items-center justify-between border-b border-white/10 bg-gradient-to-b from-black/80 to-transparent"
+      >
+        <div class="flex items-center gap-3">
+          <span
+            class="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping"
+          ></span>
+          <span class="font-serif text-lg tracking-wide text-brand-200"
+            >Du Hành Ký Ức Thanh Xuân</span
+          >
+        </div>
+        <div class="flex items-center gap-4">
+          <span
+            id="tm-progress-indicator"
+            class="text-xs text-neutral-400 font-mono"
+            >0 / 0</span
+          >
+          <button
+            onclick="stopTimeMachine()"
+            class="p-2 rounded-full hover:bg-white/10 text-neutral-300 hover:text-white transition-all"
+          >
+            <i class="fa-solid fa-circle-xmark text-2xl"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Cinema stage -->
+      <div
+        class="relative z-10 flex-1 flex flex-col justify-center items-center px-6 py-8 overflow-hidden"
+      >
+        <div
+          id="tm-stage"
+          class="max-w-3xl w-full text-center space-y-8 transform transition-all duration-700 opacity-0 scale-95"
+        >
+          <div class="inline-block">
+            <span
+              id="tm-period-badge"
+              class="bg-brand-800 text-brand-100 border border-brand-700 text-xs font-bold tracking-widest uppercase px-5 py-2 rounded-full shadow-glow"
+              >Lớp 10</span
+            >
+          </div>
+
+          <div class="space-y-6">
+            <div id="tm-emoji" class="text-7xl">🌸</div>
+            <p
+              id="tm-text"
+              class="font-serif text-xl sm:text-3xl md:text-4xl text-neutral-100 leading-relaxed italic max-h-[48vh] overflow-y-auto px-4 font-light select-none"
+            >
+              "Không có nội dung..."
+            </p>
+          </div>
+
+          <div class="border-t border-white/10 pt-4 max-w-xs mx-auto">
+            <p id="tm-author" class="font-bold tracking-wider text-brand-200">
+              Hoàng Nam
+            </p>
+            <p
+              id="tm-meta"
+              class="text-[10px] text-neutral-400 mt-1 uppercase tracking-wider"
+            >
+              Được ghi lại
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Time Machine navigation footer -->
+      <div
+        class="relative z-10 px-6 py-6 border-t border-white/10 bg-gradient-to-t from-black/80 to-transparent flex flex-col sm:flex-row items-center justify-between gap-4"
+      >
+        <div class="text-[11px] text-neutral-400 flex items-center gap-1.5">
+          <i class="fa-solid fa-info-circle text-brand-300"></i> Dòng thời gian
+          tự động trình diễn sau mỗi 8 giây
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button
+            onclick="prevTimeStep()"
+            class="p-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all active:scale-95"
+            title="Kỷ niệm trước"
+          >
+            <i class="fa-solid fa-arrow-left"></i>
+          </button>
+          <button
+            id="tm-play-pause-btn"
+            onclick="toggleTimeAutoplay()"
+            class="p-3.5 px-6 rounded-xl bg-brand-700 hover:bg-brand-600 text-white font-bold text-xs tracking-wider uppercase transition-all active:scale-95 flex items-center gap-2 shadow-glow"
+            title="Tạm dừng/Phát tiếp"
+          >
+            <i id="tm-play-icon" class="fa-solid fa-pause"></i>
+            <span id="tm-play-text">Tự động phát</span>
+          </button>
+          <button
+            onclick="nextTimeStep()"
+            class="p-3.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all active:scale-95"
+            title="Kỷ niệm sau"
+          >
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDENT EDITOR MODAL -->
+    <div
+      id="member-editor-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-premium flex flex-col max-h-[90vh]"
+      >
+        <div
+          class="bg-neutral-50 px-6 py-4 border-b border-neutral-150 flex items-center justify-between"
+        >
+          <h4
+            id="member-modal-title"
+            class="font-serif text-lg font-bold text-neutral-800"
+          >
+            Thêm Thành Viên
+          </h4>
+          <button
+            onclick="closeMemberEditor()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4 flex-1 overflow-y-auto">
+          <input type="hidden" id="edit-member-id" />
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Tên thành viên *</label
+            >
+            <input
+              type="text"
+              id="edit-member-name"
+              required
+              placeholder="Tên thật..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Biệt danh / Danh xưng</label
+            >
+            <input
+              type="text"
+              id="edit-member-nickname"
+              placeholder="Ví dụ: Nam Còi..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Châm ngôn thanh xuân</label
+            >
+            <input
+              type="text"
+              id="edit-member-quote"
+              placeholder="Châm ngôn..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Hình Đại Diện (Chỉ cần gõ Emoji hoặc chèn Link ảnh)</label
+            >
+            <input
+              type="text"
+              id="edit-member-emoji"
+              placeholder="Ví dụ: 🤠, 🙋‍♀️, hoặc link ảnh trực tuyến..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-between"
+        >
+          <button
+            id="delete-member-btn"
+            onclick="triggerDeleteMember()"
+            class="hidden px-3.5 py-2 text-xs font-bold text-red-600 hover:text-red-700 transition-all"
+          >
+            <i class="fa-solid fa-trash mr-1"></i> Xóa
+          </button>
+          <div class="flex gap-2">
+            <button
+              onclick="closeMemberEditor()"
+              class="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl text-xs font-bold"
+            >
+              Hủy
+            </button>
+            <button
+              onclick="saveMember()"
+              class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs"
+            >
+              Lưu Lại
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEACHER EDITOR MODAL -->
+    <div
+      id="teacher-editor-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-premium flex flex-col max-h-[90vh]"
+      >
+        <div
+          class="bg-neutral-50 px-6 py-4 border-b border-neutral-150 flex items-center justify-between"
+        >
+          <h4
+            id="teacher-modal-title"
+            class="font-serif text-lg font-bold text-neutral-800"
+          >
+            Thêm Giáo Viên
+          </h4>
+          <button
+            onclick="closeTeacherEditor()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4 flex-1 overflow-y-auto">
+          <input type="hidden" id="edit-teacher-id" />
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Họ Tên Thầy/Cô *</label
+            >
+            <input
+              type="text"
+              id="edit-teacher-name"
+              required
+              placeholder="Họ và tên..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Môn giảng dạy / Vị trí *</label
+            >
+            <input
+              type="text"
+              id="edit-teacher-subject"
+              required
+              placeholder="Ví dụ: Giáo viên chủ nhiệm..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Câu nói thương hiệu / Lời nhắn nhủ</label
+            >
+            <textarea
+              id="edit-teacher-quote"
+              rows="3"
+              placeholder="Nhập lời nhắn gửi..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700 resize-none"
+            ></textarea>
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Niên khoá / Giai đoạn gắn bó</label
+            >
+            <input
+              type="text"
+              id="edit-teacher-period"
+              placeholder="Ví dụ: Lớp 10, Cả 3 năm..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-between"
+        >
+          <button
+            id="delete-teacher-btn"
+            onclick="triggerDeleteTeacher()"
+            class="hidden px-3.5 py-2 text-xs font-bold text-red-600 hover:text-red-700 transition-all"
+          >
+            <i class="fa-solid fa-trash mr-1"></i> Xóa
+          </button>
+          <div class="flex gap-2">
+            <button
+              onclick="closeTeacherEditor()"
+              class="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl text-xs font-bold"
+            >
+              Hủy
+            </button>
+            <button
+              onclick="saveTeacher()"
+              class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs"
+            >
+              Lưu Lại
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACHIEVEMENT EDITOR MODAL -->
+    <div
+      id="achievement-editor-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-premium flex flex-col max-h-[90vh]"
+      >
+        <div
+          class="bg-neutral-50 px-6 py-4 border-b border-neutral-150 flex items-center justify-between"
+        >
+          <h4
+            id="achievement-modal-title"
+            class="font-serif text-lg font-bold text-neutral-800"
+          >
+            Thêm Thành Tích
+          </h4>
+          <button
+            onclick="closeAchievementEditor()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4 flex-1 overflow-y-auto">
+          <input type="hidden" id="edit-achievement-id" />
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Tên Thành Tích / Giải Thưởng *</label
+            >
+            <input
+              type="text"
+              id="edit-achievement-title"
+              required
+              placeholder="Nhập tên giải..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Khối lớp đạt giải *</label
+            >
+            <select
+              id="edit-achievement-year"
+              required
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700 cursor-pointer"
+            >
+              <option value="10">Năm Lớp 10</option>
+              <option value="11">Năm Lớp 11</option>
+              <option value="12">Năm Lớp 12</option>
+            </select>
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Mô tả cụ thể chiến tích</label
+            >
+            <textarea
+              id="edit-achievement-desc"
+              rows="3"
+              placeholder="Ghi thêm các chi tiết thú vị..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700 resize-none"
+            ></textarea>
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-between"
+        >
+          <button
+            id="delete-achievement-btn"
+            onclick="triggerDeleteAchievement()"
+            class="hidden px-3.5 py-2 text-xs font-bold text-red-600 hover:text-red-700 transition-all"
+          >
+            <i class="fa-solid fa-trash mr-1"></i> Xóa
+          </button>
+          <div class="flex gap-2">
+            <button
+              onclick="closeAchievementEditor()"
+              class="px-4 py-2 border border-neutral-300 text-neutral-700 rounded-xl text-xs font-bold"
+            >
+              Hủy
+            </button>
+            <button
+              onclick="saveAchievement()"
+              class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs"
+            >
+              Lưu Lại
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SIGNATURE PAD MODAL -->
+    <div
+      id="sig-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-premium flex flex-col max-h-[95vh]"
+      >
+        <div
+          class="bg-brand-50 px-6 py-4 border-b border-brand-200 flex items-center justify-between"
+        >
+          <h4 class="font-serif text-lg font-bold text-brand-900">
+            <i class="fa-solid fa-signature mr-2 text-brand-700"></i> Đặt Bút
+            Lưu Chữ Ký
+          </h4>
+          <button
+            onclick="closeSignatureCanvasModal()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4 flex-1 overflow-y-auto">
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Họ Tên Thật Của Bạn *</label
+            >
+            <input
+              type="text"
+              id="sig-owner"
+              required
+              placeholder="Nhập tên..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-1"
+              >Lời nhắn / Châm ngôn ngắn</label
+            >
+            <input
+              type="text"
+              id="sig-quote"
+              placeholder="Lời nhắn ngủ đến tập thể lớp..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold text-neutral-600 uppercase"
+                >Ký trực tiếp vào khung vẽ dưới đây</label
+              >
+              <button
+                onclick="clearSignatureCanvas()"
+                class="text-xs text-red-600 hover:text-red-700 font-bold"
+              >
+                <i class="fa-solid fa-eraser mr-1"></i>Vẽ lại
+              </button>
+            </div>
+            <div
+              class="chalkboard border border-brand-200/60 rounded-2xl overflow-hidden aspect-[16/9] relative cursor-crosshair"
+            >
+              <canvas
+                id="signature-canvas"
+                class="w-full h-full block touch-none"
+              ></canvas>
+              <div
+                class="absolute bottom-2.5 left-2.5 pointer-events-none text-[10px] text-neutral-400 bg-neutral-950/70 px-2.5 py-1 rounded-lg"
+              >
+                Ký bằng ngón tay hoặc chuột
+              </div>
+            </div>
+          </div>
+          <div>
+            <label
+              class="block text-xs font-bold text-neutral-600 uppercase mb-2"
+              >Màu Sắc Nét Bút</label
+            >
+            <div class="flex gap-2.5">
+              <button
+                onclick="setInkColor('#ffffff')"
+                class="ink-color-btn w-6 h-6 rounded-full border-2 border-white ring-2 ring-brand-700 bg-white"
+                data-color="#ffffff"
+              ></button>
+              <button
+                onclick="setInkColor('#fde047')"
+                class="ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-yellow-300"
+                data-color="#fde047"
+              ></button>
+              <button
+                onclick="setInkColor('#60a5fa')"
+                class="ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-blue-400"
+                data-color="#60a5fa"
+              ></button>
+              <button
+                onclick="setInkColor('#f87171')"
+                class="ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-red-400"
+                data-color="#f87171"
+              ></button>
+              <button
+                onclick="setInkColor('#4ade80')"
+                class="ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-green-400"
+                data-color="#4ade80"
+              ></button>
+            </div>
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-end gap-2.5"
+        >
+          <button
+            onclick="closeSignatureCanvasModal()"
+            class="px-4 py-2 border border-neutral-300 text-neutral-700 font-bold rounded-xl text-xs"
+          >
+            Hủy
+          </button>
+          <button
+            onclick="saveSignature()"
+            class="px-5 py-2.5 bg-brand-800 hover:bg-brand-900 text-white font-bold rounded-xl text-xs transition-all shadow"
+          >
+            Gửi Lên Bức Tường
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHOTO UPLOAD MODAL -->
+    <div
+      id="upload-photo-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-md w-full overflow-hidden shadow-premium"
+      >
+        <div
+          class="bg-brand-50 px-6 py-4 border-b border-brand-200 flex items-center justify-between"
+        >
+          <h4 class="font-serif text-lg font-bold text-brand-900">
+            <i class="fa-solid fa-cloud-arrow-up mr-2 text-brand-700"></i> Đăng
+            Tải Ảnh Kỷ Niệm
+          </h4>
+          <button
+            onclick="closeUploadPhotoModal()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-neutral-600 mb-1"
+              >Mô tả bức ảnh *</label
+            >
+            <input
+              type="text"
+              id="photo-caption"
+              required
+              placeholder="Ghi lại sự kiện..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-neutral-600 mb-1"
+              >Họ Tên Người Đăng *</label
+            >
+            <input
+              type="text"
+              id="photo-uploader"
+              required
+              placeholder="Tên thật của bạn..."
+              class="w-full bg-brand-50 border border-brand-200/50 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+            />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-neutral-600 mb-1"
+              >Chọn Tệp Hình Ảnh *</label
+            >
+            <input
+              type="file"
+              id="photo-file"
+              accept="image/*"
+              class="w-full text-xs text-neutral-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-100 file:text-brand-800 hover:file:bg-brand-200 cursor-pointer"
+            />
+          </div>
+          <div
+            id="upload-progress"
+            class="hidden text-xs text-brand-700 font-semibold animate-pulse text-center"
+          >
+            Đang giải nén và lưu trữ bức ảnh kỷ niệm...
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-end gap-2.5"
+        >
+          <button
+            onclick="closeUploadPhotoModal()"
+            class="px-4 py-2 border border-neutral-300 text-neutral-700 font-bold rounded-xl text-xs"
+          >
+            Hủy
+          </button>
+          <button
+            onclick="uploadPhoto()"
+            class="px-5 py-2.5 bg-brand-700 hover:bg-brand-800 text-white font-bold rounded-xl text-xs"
+          >
+            Đăng Tải
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FIREBASE RULES HELPER MODAL -->
+    <div
+      id="rules-modal"
+      class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-3xl max-w-2xl w-full overflow-hidden shadow-premium flex flex-col max-h-[90vh]"
+      >
+        <div
+          class="bg-red-50 px-6 py-4 border-b border-red-100 flex items-center justify-between"
+        >
+          <h4
+            class="font-serif text-lg font-bold text-red-800 flex items-center gap-2"
+          >
+            <i
+              class="fa-solid fa-triangle-exclamation text-red-600 animate-pulse"
+            ></i>
+            Sửa Lỗi Phân Quyền Firestore Database
+          </h4>
+          <button
+            onclick="closeRulesModal()"
+            class="text-neutral-400 hover:text-neutral-600"
+          >
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+        <div class="p-6 space-y-4 flex-1 overflow-y-auto">
+          <p class="text-xs text-neutral-600 leading-relaxed">
+            Hệ thống lưu trữ dữ liệu báo lỗi phân quyền
+            <code class="bg-red-100 text-red-700 px-1 rounded font-mono"
+              >Missing or insufficient permissions</code
+            >. Để mở khóa và kích hoạt mây đồng bộ, em hãy thực hiện các bước
+            cấu hình Rules đơn giản sau:
+          </p>
+          <ol
+            class="list-decimal list-inside text-xs text-neutral-700 space-y-2.5 font-medium"
+          >
+            <li>
+              Đăng nhập trang quản trị
+              <a
+                href="https://console.firebase.google.com/"
+                target="_blank"
+                class="text-brand-700 font-bold underline"
+                >Firebase Console</a
+              >.
+            </li>
+            <li>
+              Ở menu đứng bên trái màn hình, chọn mục
+              <strong>Firestore Database</strong>.
+            </li>
+            <li>Chọn thẻ <strong>Rules</strong> (Quy tắc) ở góc trên cùng.</li>
+            <li>
+              Sao chép toàn bộ mã quy tắc ở hộp phía dưới, xóa sạch mã cũ rồi
+              dán mã mới thay thế, sau đó nhấn <strong>Publish</strong>.
+            </li>
+          </ol>
+
+          <div class="space-y-1">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-neutral-500"
+                >MÃ RULES PHÙ HỢP CẦN DÁN:</span
+              >
+              <button
+                onclick="copyRulesToClipboard()"
+                class="text-xs bg-brand-800 hover:bg-brand-900 text-white font-bold py-1 px-3 rounded-lg transition-all"
+              >
+                <i class="fa-regular fa-copy mr-1"></i> Sao chép quy tắc
+              </button>
+            </div>
+            <pre
+              id="rules-code-block"
+              class="bg-slate-900 text-emerald-400 p-4 rounded-xl text-[11px] font-mono overflow-x-auto leading-relaxed max-h-[220px]"
+            >
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /artifacts/{appId}/public/data/{document=**} {
+      allow read, write: if true;
+    }
+  }
+}</pre
+            >
+          </div>
+        </div>
+        <div
+          class="bg-neutral-50 px-6 py-4 border-t border-neutral-100 flex items-center justify-end"
+        >
+          <button
+            onclick="closeRulesModal()"
+            class="px-5 py-2.5 bg-brand-800 hover:bg-brand-900 text-white font-bold rounded-xl text-xs transition-all"
+          >
+            Tôi Đã Hoàn Thành
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONFIRMATION MODAL -->
+    <div
+      id="confirm-modal"
+      class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden"
+    >
+      <div
+        class="bg-white rounded-2xl max-w-sm w-full overflow-hidden shadow-premium p-6 space-y-4"
+      >
+        <div class="flex items-center gap-3 text-brand-900">
+          <div
+            class="bg-brand-100 w-10 h-10 rounded-full flex items-center justify-center"
+          >
+            <i class="fa-solid fa-triangle-exclamation text-brand-700"></i>
+          </div>
+          <h4 class="font-serif text-lg font-bold">Xác Nhận Hành Động?</h4>
+        </div>
+        <p
+          id="confirm-message"
+          class="text-xs text-neutral-500 leading-relaxed"
+        >
+          Bạn có chắc chắn muốn thực hiện hành động này không?
+        </p>
+        <div class="flex items-center justify-end gap-2.5 pt-2">
+          <button
+            id="confirm-cancel-btn"
+            class="px-4 py-2 border border-neutral-200 text-neutral-600 rounded-xl text-xs font-bold hover:bg-neutral-50 transition-all"
+          >
+            Hủy
+          </button>
+          <button
+            id="confirm-ok-btn"
+            class="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl text-xs transition-all shadow"
+          >
+            Đồng Ý
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRIMARY JAVASCRIPT SYSTEM ENGINE -->
+    <script>
+      // System wide navigation state
+      window.currentTab = "home";
+      window.isAdminActive = false;
+
+      // Local global state cache
+      window.allMemories = [];
+      window.allSignatures = [];
+      window.allMembers = [];
+      window.allTeachers = [];
+      window.allAchievements = [];
+      window.allPhotos = [];
+      window.allCapsules = [];
+
+      // Check if admin is authorized previously on this device
+      if (localStorage.getItem("isAdminDevice") === "true") {
+        window.isAdminActive = true;
+        document.addEventListener("DOMContentLoaded", () => {
+          document.getElementById("admin-badge").classList.remove("hidden");
+          document
+            .getElementById("admin-logout-btn")
+            .classList.remove("hidden");
+          revealAdminButtons();
+        });
+      }
+
+      // Navigation engine
+      window.switchTab = function (tabId) {
+        window.currentTab = tabId;
+
+        // Hide tabs
+        const contents = document.querySelectorAll(".tab-content");
+        contents.forEach((el) => el.classList.add("hidden"));
+
+        // Show current tab
+        const target = document.getElementById(`section-${tabId}`);
+        if (target) target.classList.remove("hidden");
+
+        // Reset tab designs
+        const btns = document.querySelectorAll(".tab-btn");
+        btns.forEach((btn) => {
+          btn.className =
+            "tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-all flex items-center gap-2";
+        });
+
+        // Set chosen navigation button active style
+        const activeBtn = document.getElementById(`tab-${tabId}`);
+        if (activeBtn) {
+          activeBtn.className =
+            "tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-brand-900 bg-white shadow-sm border border-brand-200/30 transition-all flex items-center gap-2";
+        }
+      };
+
+      // Custom UI notification banner
+      window.showCustomNotice = function (html) {
+        const wrap = document.createElement("div");
+        wrap.className =
+          "fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50 bg-neutral-900 text-white text-xs sm:text-sm font-medium py-3.5 px-6 rounded-2xl shadow-premium border border-neutral-800 flex items-center gap-2.5 transition-all duration-300 opacity-0 translate-y-3";
+        wrap.innerHTML = html;
+        document.body.appendChild(wrap);
+
+        setTimeout(() => {
+          wrap.classList.remove("opacity-0", "translate-y-3");
+        }, 10);
+        setTimeout(() => {
+          wrap.classList.add("opacity-0", "translate-y-3");
+          setTimeout(() => wrap.remove(), 300);
+        }, 3600);
+      };
+    </script>
+
+    <script>
+      // Handwriting canvas logic
+      let sigCanvas, sigCtx;
+      let isDrawing = false;
+      let lastX = 0;
+      let lastY = 0;
+      let inkColor = "#ffffff";
+
+      function initSignaturePad() {
+        sigCanvas = document.getElementById("signature-canvas");
+        if (!sigCanvas) return;
+        sigCtx = sigCanvas.getContext("2d");
+
+        recalculateCanvasSize();
+        window.addEventListener("resize", recalculateCanvasSize);
+
+        sigCtx.lineWidth = 3.5;
+        sigCtx.lineCap = "round";
+        sigCtx.lineJoin = "round";
+        sigCtx.strokeStyle = inkColor;
+
+        // PC Drawing listeners
+        sigCanvas.addEventListener("mousedown", (e) => {
+          isDrawing = true;
+          [lastX, lastY] = getCanvasCoords(e);
+        });
+        sigCanvas.addEventListener("mousemove", (e) => {
+          if (!isDrawing) return;
+          const [currX, currY] = getCanvasCoords(e);
+          sigCtx.beginPath();
+          sigCtx.moveTo(lastX, lastY);
+          sigCtx.lineTo(currX, currY);
+          sigCtx.stroke();
+          [lastX, lastY] = [currX, currY];
+        });
+        sigCanvas.addEventListener("mouseup", () => (isDrawing = false));
+        sigCanvas.addEventListener("mouseout", () => (isDrawing = false));
+
+        // Responsive Mobile/Tablet touch gesture listeners
+        sigCanvas.addEventListener("touchstart", (e) => {
+          isDrawing = true;
+          const touch = e.touches[0];
+          const rect = sigCanvas.getBoundingClientRect();
+          lastX = (touch.clientX - rect.left) * (sigCanvas.width / rect.width);
+          lastY = (touch.clientY - rect.top) * (sigCanvas.height / rect.height);
+          e.preventDefault();
+        });
+        sigCanvas.addEventListener("touchmove", (e) => {
+          if (!isDrawing) return;
+          const touch = e.touches[0];
+          const rect = sigCanvas.getBoundingClientRect();
+          const currX =
+            (touch.clientX - rect.left) * (sigCanvas.width / rect.width);
+          const currY =
+            (touch.clientY - rect.top) * (sigCanvas.height / rect.height);
+
+          sigCtx.beginPath();
+          sigCtx.moveTo(lastX, lastY);
+          sigCtx.lineTo(currX, currY);
+          sigCtx.stroke();
+          [lastX, lastY] = [currX, currY];
+          e.preventDefault();
+        });
+        sigCanvas.addEventListener("touchend", () => (isDrawing = false));
+      }
+
+      function recalculateCanvasSize() {
+        if (!sigCanvas) return;
+        const wrap = sigCanvas.parentElement;
+        sigCanvas.width = wrap.clientWidth;
+        sigCanvas.height = wrap.clientHeight;
+        if (sigCtx) {
+          sigCtx.lineWidth = 3.5;
+          sigCtx.lineCap = "round";
+          sigCtx.lineJoin = "round";
+          sigCtx.strokeStyle = inkColor;
+        }
+      }
+
+      function getCanvasCoords(e) {
+        const rect = sigCanvas.getBoundingClientRect();
+        const x = (e.clientX - rect.left) * (sigCanvas.width / rect.width);
+        const y = (e.clientY - rect.top) * (sigCanvas.height / rect.height);
+        return [x, y];
+      }
+
+      window.clearSignatureCanvas = function () {
+        if (sigCtx) sigCtx.clearRect(0, 0, sigCanvas.width, sigCanvas.height);
+      };
+
+      window.setInkColor = function (color) {
+        inkColor = color;
+        if (sigCtx) sigCtx.strokeStyle = color;
+
+        const btns = document.querySelectorAll(".ink-color-btn");
+        btns.forEach((btn) => {
+          btn.className =
+            "ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-neutral-200";
+        });
+        event.currentTarget.className =
+          "ink-color-btn w-6 h-6 rounded-full border-2 border-white ring-2 ring-brand-700 bg-white";
+      };
+    </script>
+
+    <script>
+      // Immersive Time machine slides engine
+      let tmIndex = 0;
+      let tmAutoplayInterval = null;
+      let dustAnimationId = null;
+
+      window.startTimeMachine = function () {
+        if (window.allMemories.length === 0) {
+          window.showCustomNotice(
+            "⚠️ Lớp mình chưa đóng góp mẩu kỷ niệm nào để khởi chạy cỗ máy thời gian!",
+          );
+          return;
+        }
+        initSynthMusicContext();
+        document
+          .getElementById("time-machine-screen")
+          .classList.remove("hidden");
+        tmIndex = 0;
+        showTimeStep();
+        startTimeAutoplay();
+        startDustCanvas();
+      };
+
+      window.stopTimeMachine = function () {
+        document.getElementById("time-machine-screen").classList.add("hidden");
+        stopTimeAutoplay();
+        if (dustAnimationId) cancelAnimationFrame(dustAnimationId);
+      };
+
+      function showTimeStep() {
+        if (window.allMemories.length === 0) return;
+        if (tmIndex < 0) tmIndex = window.allMemories.length - 1;
+        if (tmIndex >= window.allMemories.length) tmIndex = 0;
+
+        const stage = document.getElementById("tm-stage");
+        if (!stage) return;
+        stage.className =
+          "max-w-3xl w-full text-center space-y-8 transform transition-all duration-700 opacity-0 scale-95";
+
+        setTimeout(() => {
+          const item = window.allMemories[tmIndex];
+
+          const periodLabels = {
+            "10-1":
+              "Năm Lớp 10 • Những ngày bỡ ngỡ đầu tiên bước chân vào trường",
+            "10-2": "Năm Lớp 10 • Thân quen lớp học, mến yêu thầy cô bạn bè",
+            "11-1": "Năm Lớp 11 • Sôi nổi phong trào, nhiệt huyết của tuổi trẻ",
+            "11-2":
+              "Năm Lớp 11 • Gắn bó keo sơn, quây quần mỗi giờ ra chơi dã ngoại",
+            "12-1": "Năm Lớp 12 • Tăng tốc thắp lửa hoài bão khát khao bay cao",
+            "12-2": "Năm Lớp 12 • Gấp gáp lo toan ôn tập mùa thi cử nghẹt thở",
+            "12-3":
+              "Cuối Lớp 12 • Tiếng ve sầu tốt nghiệp chia ly ngập nước mắt 🌸",
+          };
+
+          document.getElementById("tm-period-badge").innerText =
+            periodLabels[item.period] || "Mốc Kỷ Niệm";
+          document.getElementById("tm-emoji").innerText = item.emoji || "🌸";
+          document.getElementById("tm-text").innerText = `"${item.text}"`;
+          document.getElementById("tm-author").innerText = item.author;
+          document.getElementById("tm-meta").innerText =
+            `Thắp sáng dòng thời gian ngày: ${new Date(item.timestamp).toLocaleDateString("vi-VN")}`;
+          document.getElementById("tm-progress-indicator").innerText =
+            `${tmIndex + 1} / ${window.allMemories.length}`;
+
+          stage.className =
+            "max-w-3xl w-full text-center space-y-8 transform transition-all duration-700 opacity-100 scale-100";
+        }, 300);
+      }
+
+      window.nextTimeStep = function () {
+        resetTimeAutoplay();
+        tmIndex++;
+        showTimeStep();
+      };
+
+      window.prevTimeStep = function () {
+        resetTimeAutoplay();
+        tmIndex--;
+        showTimeStep();
+      };
+
+      function startTimeAutoplay() {
+        stopTimeAutoplay();
+        const icon = document.getElementById("tm-play-icon");
+        const text = document.getElementById("tm-play-text");
+        if (icon) icon.className = "fa-solid fa-pause";
+        if (text) text.innerText = "Tự động phát";
+
+        tmAutoplayInterval = setInterval(() => {
+          tmIndex++;
+          showTimeStep();
+        }, 8000);
+      }
+
+      function stopTimeAutoplay() {
+        if (tmAutoplayInterval) {
+          clearInterval(tmAutoplayInterval);
+          tmAutoplayInterval = null;
+        }
+        const icon = document.getElementById("tm-play-icon");
+        const text = document.getElementById("tm-play-text");
+        if (icon) icon.className = "fa-solid fa-play";
+        if (text) text.innerText = "Tạm dừng";
+      }
+
+      function resetTimeAutoplay() {
+        if (tmAutoplayInterval) startTimeAutoplay();
+      }
+
+      // Chalkboard dust effects in full screen cinema
+      function startDustCanvas() {
+        const canvas = document.getElementById("dust-canvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const list = [];
+        const count = 45;
+
+        class Particle {
+          constructor() {
+            this.reset();
+            this.y = Math.random() * canvas.height;
+          }
+          reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = -10;
+            this.size = Math.random() * 2 + 1;
+            this.speedY = Math.random() * 0.3 + 0.1;
+            this.speedX = Math.random() * 0.2 - 0.1;
+            this.color =
+              Math.random() > 0.4
+                ? "rgba(253, 243, 231, 0.2)"
+                : "rgba(232, 163, 109, 0.15)";
+          }
+          update() {
+            this.y += this.speedY;
+            this.x += this.speedX;
+            if (this.y > canvas.height || this.x < 0 || this.x > canvas.width)
+              this.reset();
+          }
+          draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fillStyle = this.color;
+            ctx.fill();
+          }
+        }
+
+        for (let i = 0; i < count; i++) list.push(new Particle());
+
+        function tick() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          list.forEach((p) => {
+            p.update();
+            p.draw();
+          });
+          dustAnimationId = requestAnimationFrame(tick);
+        }
+        tick();
+      }
+
+      // Web Audio Synthesizer sound generator
+      let audioCtx = null;
+      let isPlaying = false;
+      let seqInterval = null;
+      let globalGainNode = null;
+
+      function initSynthMusicContext() {
+        if (audioCtx) return;
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        globalGainNode = audioCtx.createGain();
+        globalGainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        globalGainNode.connect(audioCtx.destination);
+      }
+
+      function playSynthArpeggios() {
+        initSynthMusicContext();
+        if (audioCtx.state === "suspended") {
+          audioCtx.resume();
+        }
+
+        const progressions = [
+          { root: 130.81, third: 164.81, fifth: 196.0, seventh: 246.94 }, // Cmaj7
+          { root: 110.0, third: 130.81, fifth: 164.81, seventh: 220.0 }, // Amin7
+          { root: 87.31, third: 110.0, fifth: 130.81, seventh: 174.61 }, // Fmaj7
+          { root: 98.0, third: 123.47, fifth: 146.83, seventh: 196.0 }, // G7
+        ];
+
+        let index = 0;
+
+        function triggerChord(chord) {
+          if (!audioCtx) return;
+          const now = audioCtx.currentTime;
+          const frequencies = [
+            chord.root,
+            chord.third,
+            chord.fifth,
+            chord.seventh,
+          ];
+
+          frequencies.forEach((freq, idx) => {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = idx === 0 ? "sine" : "triangle";
+            osc.frequency.setValueAtTime(freq * 2, now + idx * 0.15);
+
+            gain.gain.setValueAtTime(0, now);
+            gain.gain.linearRampToValueAtTime(0.04, now + idx * 0.15 + 0.3);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + 4.2);
+
+            osc.connect(gain);
+            gain.connect(globalGainNode);
+
+            osc.start(now + idx * 0.15);
+            osc.stop(now + 4.5);
+          });
+        }
+
+        triggerChord(progressions[index]);
+        index = (index + 1) % progressions.length;
+
+        seqInterval = setInterval(() => {
+          triggerChord(progressions[index]);
+          index = (index + 1) % progressions.length;
+        }, 3800);
+      }
+
+      window.toggleSynthMusic = function () {
+        const btn = document.getElementById("music-trigger");
+        const icon = document.getElementById("music-icon");
+
+        if (isPlaying) {
+          clearInterval(seqInterval);
+          seqInterval = null;
+          isPlaying = false;
+          if (icon) icon.className = "fa-solid fa-play";
+          if (btn)
+            btn.className =
+              "bg-brand-700 hover:bg-brand-800 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow transition-all";
+        } else {
+          playSynthArpeggios();
+          isPlaying = true;
+          if (icon) icon.className = "fa-solid fa-pause";
+          if (btn)
+            btn.className =
+              "bg-brand-100 hover:bg-brand-200 text-brand-800 w-9 h-9 rounded-xl flex items-center justify-center shadow transition-all border border-brand-300";
+        }
+      };
+
+      window.adjustVolume = function (val) {
+        initSynthMusicContext();
+        if (globalGainNode) {
+          globalGainNode.gain.setValueAtTime(val / 300, audioCtx.currentTime);
+        }
+      };
+    </script>
+
+    <script>
+      // Modal controllers helper engine
+      window.openAdminModal = function () {
+        document.getElementById("admin-modal").classList.remove("hidden");
+      };
+
+      window.closeAdminModal = function () {
+        document.getElementById("admin-modal").classList.add("hidden");
+        document.getElementById("admin-passcode").value = "";
+        document.getElementById("admin-message").classList.add("hidden");
+      };
+
+      window.openSignatureCanvasModal = function () {
+        document.getElementById("sig-modal").classList.remove("hidden");
+        setTimeout(initSignaturePad, 60);
+      };
+
+      window.closeSignatureCanvasModal = function () {
+        document.getElementById("sig-modal").classList.add("hidden");
+        document.getElementById("sig-owner").value = "";
+        document.getElementById("sig-quote").value = "";
+        clearSignatureCanvas();
+      };
+
+      window.openUploadPhotoModal = function () {
+        document
+          .getElementById("upload-photo-modal")
+          .classList.remove("hidden");
+      };
+
+      window.closeUploadPhotoModal = function () {
+        document.getElementById("upload-photo-modal").classList.add("hidden");
+        document.getElementById("photo-caption").value = "";
+        document.getElementById("photo-uploader").value = "";
+        document.getElementById("photo-file").value = "";
+        document.getElementById("upload-progress").classList.add("hidden");
+      };
+
+      window.openRulesModal = function () {
+        document.getElementById("rules-modal").classList.remove("hidden");
+      };
+
+      window.closeRulesModal = function () {
+        document.getElementById("rules-modal").classList.add("hidden");
+      };
+
+      // Custom confirm dialogue
+      let confirmSuccessCallback = null;
+      window.openConfirmModal = function (message, onSuccess) {
+        document.getElementById("confirm-message").innerText = message;
+        document.getElementById("confirm-modal").classList.remove("hidden");
+        confirmSuccessCallback = onSuccess;
+      };
+
+      window.closeConfirmModal = function () {
+        document.getElementById("confirm-modal").classList.add("hidden");
+        confirmSuccessCallback = null;
+      };
+
+      document
+        .getElementById("confirm-cancel-btn")
+        .addEventListener("click", closeConfirmModal);
+      document
+        .getElementById("confirm-ok-btn")
+        .addEventListener("click", () => {
+          if (confirmSuccessCallback) confirmSuccessCallback();
+          closeConfirmModal();
+        });
+    </script>
+
+    <script type="module">
+      import { runFirebaseInit } from "./firebase-init.js";
+      runFirebaseInit();
+    </script>
+
+    <!-- 
+        ==================================================================================
+        MÔ-ĐUN FIREBASE (Dễ dàng sao chép / tách ra file "firebase.js" độc lập khi chạy local)
+        ==================================================================================
+    -->
+    <!-- REMOVED embedded firebase-connection module -->
+    <!-- Firebase is now initialized via firebase-init.js and started by script.js -->
+
+    <div
+      id="member-slots-widget"
+      class="fixed top-24 right-4 z-40 max-w-[240px] w-full bg-white/95 backdrop-blur border border-brand-300 p-4 rounded-2xl shadow-premium transition-all duration-300"
+    >
+      <div
+        class="flex items-center justify-between mb-2 pb-1 border-b border-brand-100"
+      >
+        <h5
+          class="text-xs font-bold text-brand-900 uppercase tracking-wider flex items-center gap-1.5"
+        >
+          <i class="fa-solid fa-id-badge text-brand-700"></i> Số đại diện của
+          bạn
+        </h5>
+        <span
+          id="current-slot-badge"
+          class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md"
+          >Chưa chọn</span
+        >
+      </div>
+      <p class="text-[10px] text-neutral-500 mb-3 leading-tight">
+        Bạn bắt buộc phải chọn 1 số đại diện (0-51) để mở khóa quyền điền dữ
+        liệu.
+      </p>
+
+      <div
+        id="slots-container"
+        class="grid grid-cols-5 gap-1 max-h-40 overflow-y-auto pr-1"
+      ></div>
+    </div>
+      <div
+        class="bg-white border border-brand-200 rounded-2xl max-w-sm w-full p-6 shadow-premium space-y-4"
+      >
+        <h4 class="font-serif text-lg font-bold text-brand-900">
+          Xác Nhận Số Thành Viên
+        </h4>
+        <p class="text-xs text-neutral-600 leading-relaxed">
+          Bạn đang chọn số
+          <span
+            id="target-slot-number"
+            class="font-bold text-brand-700 text-sm"
+          ></span>
+          đại diện cho tài khoản của mình. Số này sẽ ẩn đi đối với mọi người sau
+          khi xác nhận thành công.
+        </p>
+        <div>
+          <label class="block text-xs font-bold text-neutral-700 mb-1"
+            >Tên hoặc biệt danh của bạn *</label
+          >
+          <input
+            type="text"
+            id="slot-member-name"
+            placeholder="Nhập tên để lớp mình nhận diện..."
+            class="w-full bg-brand-50 border border-brand-200 rounded-xl py-2 px-3 text-sm outline-none focus:border-brand-700"
+          />
+        </div>
+        <div class="flex justify-end gap-2 pt-1">
+          <button
+            onclick="closeClaimSlotModal()"
+            class="px-4 py-2 text-xs font-semibold text-neutral-500 hover:text-neutral-800"
+          >
+            Hủy
+          </button>
+          <button
+            onclick="confirmClaimSlot()"
+            class="px-4 py-2 text-xs font-bold text-white bg-brand-700 hover:bg-brand-800 rounded-xl shadow"
+          >
+            Xác nhận chọn
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { runFirebaseInit } from "./firebase-init.js";
+      runFirebaseInit();
+    </script>
+    <div id="slots-component-placeholder"></div>
+   <div id="slots-component-placeholder"></div>
+    <script>
+      async function loadSlotsComponent() {
+        try {
+          // GỌI CHÍNH XÁC ĐẾN FILE member.html MÀ BẠN ĐÃ TẢI LÊN
+          const response = await fetch("./member.html");
+          if (response.ok) {
+            document.getElementById("slots-component-placeholder").innerHTML = await response.text();
+            window.dispatchEvent(new Event("slotsComponentReady"));
+          } else {
+            console.error("Không thể tải tệp mã nguồn thành phần member.html");
+          }
+        } catch (error) {
+          console.error("Lỗi kết nối thành phần chọn số:", error);
+        }
+      }
+      loadSlotsComponent();
+    </script>
+    <script type="module" src="script.js"></script>
+  </body>
+</html> -->
