@@ -1,28 +1,38 @@
 <div
   id="member-slots-widget"
-  class="fixed bottom-4 right-4 md:bottom-auto md:top-24 z-40 max-w-[280px] w-full bg-white/95 backdrop-blur border border-brand-300 p-4 rounded-2xl shadow-premium transition-all duration-300"
+  class="fixed top-20 right-4 z-50 max-w-[220px] w-full bg-white/95 backdrop-blur-md border border-brand-200 p-2.5 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl"
 >
-  <div
-    class="flex items-center justify-between mb-2 pb-1 border-b border-brand-100"
-  >
-    <h5
-      class="text-xs font-bold text-brand-900 uppercase tracking-wider flex items-center gap-1.5"
-    >
-      <i class="fa-solid fa-id-badge text-brand-700"></i> Xác nhận thành viên
-    </h5>
-    <span
-      id="current-slot-badge"
-      class="text-[10px] bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md"
-      >Chưa Chọn</span
-    >
+  <div id="widget-selection-state" class="space-y-1.5">
+    <div class="flex items-center gap-1 pb-1 border-b border-brand-100">
+      <i class="fa-solid fa-id-badge text-brand-700 text-xs"></i>
+      <span class="text-[11px] font-bold text-brand-900 uppercase tracking-wider">Định danh lớp (1-52)</span>
+    </div>
+    
+    <div class="pt-0.5">
+      <select
+        id="slots-dropdown-container"
+        onchange="handleSelectSlot(this.value)"
+        class="w-full bg-brand-50 border border-brand-200 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-lg py-1 px-2 text-[11px] font-medium text-brand-900 outline-none transition-all cursor-pointer"
+      >
+        <option value="">-- Tải dữ liệu lớp... --</option>
+      </select>
+    </div>
   </div>
-  <p class="text-[10px] text-neutral-500 mb-3 leading-tight">
-    Bấm chọn số thứ tự của bạn. Trang web sẽ tải lại để hiển thị tên và mở khóa
-    quyền viết.
-  </p>
 
-  <div
-    id="slots-container"
-    class="custom-scrollbar grid grid-cols-4 gap-1.5 max-h-52 overflow-y-auto pr-1"
-  ></div>
+  <div id="widget-profile-state" class="hidden animate-fade-in">
+    <div id="profile-card-layout" class="flex items-center gap-2 bg-gradient-to-br from-brand-100 to-brand-50 p-1.5 rounded-lg border border-brand-200/50">
+      <div class="w-6 h-6 bg-brand-700 text-white rounded-full flex items-center justify-center font-bold text-[11px] shadow-sm shrink-0" id="profile-avatar-num">
+        --
+      </div>
+      <div class="min-w-0 flex-1">
+        <h4 class="text-[11px] font-bold text-brand-900 truncate leading-tight">
+          Đang tải...
+        </h4>
+        <p id="profile-role-badge" class="text-[8px] uppercase tracking-widest text-brand-400 font-bold leading-none mt-0.5">Thành viên</p>
+      </div>
+      <button onclick="localStorage.removeItem('user_claimed_slot'); window.location.reload();" class="text-neutral-400 hover:text-red-500 text-[10px] px-1" title="Chọn lại số">
+        <i class="fa-solid fa-arrow-rotate-left"></i>
+      </button>
+    </div>
+  </div>
 </div>

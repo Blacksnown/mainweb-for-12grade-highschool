@@ -1,230 +1,264 @@
-// Cấu hình trạng thái định danh cục bộ
-const TOTAL_SLOTS = 52;
-let cachedSlotsData = null;
+// HỆ THỐNG SỐ ĐỊNH DANH (1 ĐẾN 52)
+const START_SLOT = 1;
+const END_SLOT = 52; 
+const SPECIAL_ADMIN_SLOT = 52;
 
-// Kiểm tra xem trình duyệt này trước đó đã click chọn số nào chưa
 let chosenSlotNumber = localStorage.getItem("user_claimed_slot");
+if (chosenSlotNumber !== null) {
+  chosenSlotNumber = parseInt(chosenSlotNumber);
+}
 
-// CHỜ GIAO DIỆN HTML LOAD XONG THÌ KHỞI TẠO
+// Lắng nghe tín hiệu khi component member.html nạp thành công
 window.addEventListener("slotsComponentReady", () => {
-  if (chosenSlotNumber !== null) {
-    chosenSlotNumber = parseInt(chosenSlotNumber);
-  }
-
-  initSlotsWidgetDOM();
-
-  // Nếu dữ liệu từ Firebase đổ về trước hoặc sau khi load giao diện
-  if (cachedSlotsData) {
-    window.updateSlotsUI(cachedSlotsData);
-  } else {
-    lockFormsForViewerOnly(); // Mặc định chưa có số định danh thì khóa form
-  }
+  initNoticeMarqueeDOM(); // Đảm bảo chạy thông báo chữ chạy
+  initRealtimeSlotsSync();
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  setupFormActions();
+  applyFeatureLockStatus();
+  interceptUnauthenticatedActions();
 });
 
-// Bước 1: Khởi tạo danh sách 52 ô số nguyên bản ban đầu (0 -> 51)
-function initSlotsWidgetDOM() {
-  const container = document.getElementById("slots-container");
-  if (!container) return;
+// 1. CẤU HÌNH TRẠNG THÁI KHÓA VÀ BẢO VỆ GIAO DIỆN CHƯA ĐĂNG NHẬP
+function applyFeatureLockStatus() {
+  console.log("-> [Hệ thống] Truy cập với tư cách: " + (chosenSlotNumber ? `Thành viên số ${chosenSlotNumber}` : "Khách vãng lai (Ẩn danh)"));
+  
+  if (!chosenSlotNumber) {
+    // THIẾT LẬP KHÓA GIAO DIỆN (VISUAL LOCK) KHI CHƯA CHỌN SỐ ĐỊNH DANH
+    
+    // Khóa tất cả các trường nhập liệu trong các Form kỷ niệm và hộp thư
+    const inputsToLock = document.querySelectorAll("#memory-form input, #memory-form textarea, #memory-form select, #capsule-form input, #capsule-form textarea, #capsule-form select");
+    inputsToLock.forEach(item => {
+      item.disabled = true;
+      item.placeholder = "🔒 Vui lòng chọn Số định danh lớp để mở khóa tính năng viết...";
+      item.style.backgroundColor = "#f5f5f5";
+      item.style.cursor = "not-allowed";
+    });
 
-  container.innerHTML = "";
-  for (let i = 0; i < TOTAL_SLOTS; i++) {
-    const btn = document.createElement("button");
-    btn.id = `slot-btn-${i}`;
-    btn.innerText = i; // Hiển thị số nguyên bản
-    btn.className =
-      "slot-item-btn bg-brand-100 hover:bg-brand-200 text-brand-900 font-bold text-xs py-1.5 px-1 rounded-lg border border-brand-200/40 transition-all text-center truncate shadow-sm";
+    // Khóa luôn các nút bấm Gửi (Submit) trong form
+    const buttonsToLock = document.querySelectorAll("#memory-form button[type='submit'], #capsule-form button[type='submit']");
+    buttonsToLock.forEach(btn => {
+      btn.disabled = true;
+      btn.innerHTML = "🔒 Đã khóa (Yêu cầu định danh)";
+      btn.style.opacity = "0.6";
+      btn.style.cursor = "not-allowed";
+    });
 
-    // SỰ KIỆN CLICK: Lưu số -> Tải lại trang (F5) ngay lập tức
-    btn.onclick = () => {
-      if (localStorage.getItem("user_claimed_slot") !== null) {
-        alert("Bạn đã xác nhận số định danh trên thiết bị này rồi!");
-        return;
-      }
-      if (
-        confirm(
-          `Xác nhận bạn là thành viên số ${i}? Trang web sẽ tự động tải lại để nhận diện.`,
-        )
-      ) {
-        localStorage.setItem("user_claimed_slot", i);
-        location.reload(); // TẢI LẠI TRANG
-      }
-    };
-    container.appendChild(btn);
+    // Ghi đè hàm chuyển Tab (switchTab) mặc định để ngăn khách xem các mục bảo mật
+    if (typeof window.switchTab === "function") {
+      const originalSwitchTab = window.switchTab;
+      window.switchTab = function(tabId) {
+        if (tabId !== 'home') {
+          alert("🔒 Tính năng đã khóa: Bạn cần chọn số định danh lớp ở góc trên bên phải để vào xem hoặc sử dụng phân hệ này!");
+          return false;
+        }
+        return originalSwitchTab(tabId);
+      };
+    }
+
+    setTimeout(() => {
+      window.showCustomNotice ? window.showCustomNotice("👋 Chào bạn! Hãy chọn số định danh lớp mình (ở góc trên phải) để mở khóa hệ thống nhé.") : null;
+    }, 2000);
   }
 }
 
-// Bước 2: Đồng bộ dữ liệu Admin nhập sẵn trên Firebase -> Chuyển đổi Số thành Tên sau khi load trang
-window.updateSlotsUI = function (slotsData) {
-  cachedSlotsData = slotsData;
-  const container = document.getElementById("slots-container");
-  if (!container) return;
-
-  // Tìm tên của số mà thiết bị này đã chọn (đọc từ Database)
-  let currentMemberName = slotsData[chosenSlotNumber];
-
-  if (chosenSlotNumber !== null && currentMemberName) {
-    // 1. Đổi trạng thái Badge thông báo ở góc trên widget
-    const badge = document.getElementById("current-slot-badge");
-    if (badge) {
-      badge.innerText = `Số ${chosenSlotNumber}: ${currentMemberName}`;
-      badge.className =
-        "text-[10px] bg-emerald-600 text-white font-bold px-2 py-0.5 rounded-md";
+// Hàm trợ lý kiểm tra nhanh (fallback bảo mật)
+function checkAuth(event) {
+  if (!chosenSlotNumber) {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
     }
+    alert("⚠️ Thao tác thất bại: Bạn vui lòng chọn Số định danh (ở góc trên bên phải màn hình) để tiếp tục!");
+    return false;
+  }
+  return true;
+}
 
-    // 2. Tự động điền họ tên lấy từ Database vào các ô Author trng form
-    if (document.getElementById("memory-author"))
-      document.getElementById("memory-author").value = currentMemberName;
-    if (document.getElementById("capsule-author"))
-      document.getElementById("capsule-author").value = currentMemberName;
+// Chặn đứng các hành động click gọi hàm modal từ giao diện index.html
+function interceptUnauthenticatedActions() {
+  // Chặn nút mở canvas chữ ký
+  const originalOpenSignature = window.openSignatureCanvasModal;
+  window.openSignatureCanvasModal = function() {
+    if (!checkAuth()) return;
+    if (typeof originalOpenSignature === "function") originalOpenSignature();
+  };
 
-    // 3. MỞ KHÓA TOÀN BỘ QUYỀN VIẾT BÀI
-    unlockFormsForMembers();
-  } else {
-    lockFormsForViewerOnly();
+  // Chặn nút mở modal đăng ảnh kỷ niệm
+  const originalOpenUploadPhoto = window.openUploadPhotoModal;
+  window.openUploadPhotoModal = function() {
+    if (!checkAuth()) return;
+    if (typeof originalOpenUploadPhoto === "function") originalOpenUploadPhoto();
+  };
+}
+
+// 2. TẠO THANH CHỮ CHẠY ĐỒNG BỘ REALTIME
+function initNoticeMarqueeDOM() {
+  const homeSection = document.getElementById("section-home");
+  if (!homeSection) return;
+
+  if (document.getElementById("marquee-notice-wrapper")) return;
+
+  const marqueeWrapper = document.createElement("div");
+  marqueeWrapper.id = "marquee-notice-wrapper";
+  marqueeWrapper.className = "w-full bg-amber-50 border border-amber-200 rounded-xl p-3 mb-6 flex flex-col gap-2 shadow-sm relative overflow-hidden";
+  marqueeWrapper.innerHTML = `
+    <div class="flex items-center justify-between border-b border-amber-200/60 pb-1">
+      <span class="text-[10px] font-bold text-amber-900 uppercase tracking-wider flex items-center gap-1">
+        <i class="fa-solid fa-bullhorn text-amber-600 animate-bounce"></i> Bảng Tin Lớp Học Real-time
+      </span>
+      <button id="btn-edit-notice" onclick="window.openEditNoticeModal()" class="text-[9px] bg-white text-amber-800 border border-amber-300 font-bold px-1.5 py-0.5 rounded shadow-sm hover:bg-amber-100 transition-all hidden">
+        <i class="fa-solid fa-pen"></i> Sửa tin
+      </button>
+    </div>
+    <div class="overflow-hidden w-full bg-white rounded-lg p-1.5 border border-amber-100">
+      <marquee id="marquee-text-content" class="text-xs font-semibold text-amber-900" scrollamount="4">Chào mừng các bạn đến với Trạm Dừng Thanh Xuân số định danh!</marquee>
+    </div>
+  `;
+  homeSection.insertBefore(marqueeWrapper, homeSection.firstChild);
+
+  if (chosenSlotNumber === SPECIAL_ADMIN_SLOT) {
+    const editBtn = document.getElementById("btn-edit-notice");
+    if (editBtn) editBtn.classList.remove("hidden");
   }
 
-  // Quét qua 52 ô số để xử lý giao diện hiển thị biến đổi Số -> Tên
-  for (let i = 0; i < TOTAL_SLOTS; i++) {
-    const btn = document.getElementById(`slot-btn-${i}`);
-    if (!btn) continue;
-
-    if (slotsData[i]) {
-      // Nếu là số ĐÚNG của thiết bị này đã chọn -> Biến đổi thành Tên hiển thị rực rỡ
-      if (chosenSlotNumber === i) {
-        btn.innerText = slotsData[i];
-        btn.className =
-          "slot-item-btn col-span-2 bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold text-[11px] py-1.5 px-2 rounded-lg text-left truncate shadow-md animate-fade-in pointer-events-none";
-      } else {
-        // Đối với các ô số của thành viên khác đã có tên trên DB, chuyển thành dạng ẩn/khóa
-        btn.innerText = `Số ${i} (Đã nhận)`;
-        btn.className =
-          "slot-item-btn col-span-2 bg-neutral-100 text-neutral-400 border border-neutral-200 text-[10px] py-1.5 px-1 rounded-lg text-center truncate pointer-events-none";
-      }
+  setTimeout(() => {
+    if (window.FB_FIRESTORE && window.db && window.basePath) {
+      const { doc, onSnapshot } = window.FB_FIRESTORE;
+      const noticeDocRef = doc(window.db, ...window.basePath, "system_notice");
+      onSnapshot(noticeDocRef, (docSnap) => {
+        const marqueeText = document.getElementById("marquee-text-content");
+        if (marqueeText && docSnap.exists()) {
+          marqueeText.innerText = docSnap.data().text || "Chào mừng các bạn đến với Trạm Dừng Thanh Xuân!";
+        }
+      });
     }
+  }, 1000);
+}
+
+// 3. ĐỒNG BỘ REALTIME DANH SÁCH CHỌN SỐ TRÊN DROPDOWN
+function initRealtimeSlotsSync() {
+  const selectElement = document.getElementById("slots-dropdown-container");
+  if (!selectElement) return;
+
+  selectElement.innerHTML = '<option value="">-- Chọn số định danh của bạn --</option>';
+  for (let i = START_SLOT; i <= END_SLOT; i++) {
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.id = `slot-opt-${i}`;
+    opt.innerText = i === SPECIAL_ADMIN_SLOT ? `Số ${i} - 👑 Giáo Viên Chủ Nhiệm` : `Số định danh thứ: ${i}`;
+    if (chosenSlotNumber === i) opt.selected = true;
+    selectElement.appendChild(opt);
+  }
+
+  if (chosenSlotNumber !== null) {
+    showClaimedProfileUI(chosenSlotNumber);
+  }
+
+  setTimeout(() => {
+    if (window.FB_FIRESTORE && window.db && window.basePath) {
+      const { collection, onSnapshot } = window.FB_FIRESTORE;
+      const slotsColRef = collection(window.db, ...window.basePath, "slots");
+
+      onSnapshot(slotsColRef, (snapshot) => {
+        for (let i = START_SLOT; i <= END_SLOT; i++) {
+          const opt = document.getElementById(`slot-opt-${i}`);
+          if (opt) {
+            opt.innerText = i === SPECIAL_ADMIN_SLOT ? `Số ${i} - 👑 Giáo Viên Chủ Nhiệm` : `Số định danh thứ: ${i}`;
+            opt.disabled = false;
+          }
+        }
+        snapshot.forEach((doc) => {
+          const data = doc.data();
+          const takenSlot = parseInt(data.slotIndex);
+          if (takenSlot && takenSlot !== chosenSlotNumber) {
+            const opt = document.getElementById(`slot-opt-${takenSlot}`);
+            if (opt) {
+              opt.innerText += " (❌ Đã có người nhận)";
+              opt.disabled = true;
+            }
+          }
+        });
+      });
+    }
+  }, 1200);
+}
+
+// 4. XỬ LÝ KHÓA SỐ KHI BẤM CHỌN DROPDOWN
+window.handleSelectSlot = async function (value) {
+  if (value === "") return;
+  const slotNum = parseInt(value);
+
+  if (window.FB_FIRESTORE && window.db && window.basePath) {
+    const { collection, addDoc } = window.FB_FIRESTORE;
+    try {
+      const slotsColRef = collection(window.db, ...window.basePath, "slots");
+      await addDoc(slotsColRef, {
+        slotIndex: slotNum,
+        timestamp: Date.now()
+      });
+
+      localStorage.setItem("user_claimed_slot", slotNum);
+      alert(`Đăng ký thành công số định danh cá nhân: Số ${slotNum}`);
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi kết nối đồng bộ đám mây!");
+    }
+  } else {
+    localStorage.setItem("user_claimed_slot", slotNum);
+    window.location.reload();
   }
 };
 
-// --- HỆ THỐNG KHÓA VÀ MỞ BIỂU MẪU ĐIỀN THÔNG TIN ---
-function lockFormsForViewerOnly() {
-  const memoryForm = document.getElementById("memory-form");
-  if (memoryForm) {
-    toggleFormInputsState(memoryForm, true);
-    attachLockOverlay(
-      memoryForm,
-      "Vui lòng chọn Số thứ tự của bạn ở góc màn hình để mở khóa quyền điền dữ liệu.",
-    );
-  }
-  const capsuleForm = document.getElementById("capsule-form");
-  if (capsuleForm) {
-    toggleFormInputsState(capsuleForm, true);
-    attachLockOverlay(
-      capsuleForm,
-      "Vui lòng chọn Số thứ tự của bạn ở góc màn hình để mở khóa quyền điền dữ liệu.",
-    );
-  }
-}
+// 5. HIỂN THỊ KHỐI PROFILE SAU KHI ĐĂNG KÝ THÀNH CÔNG
+function showClaimedProfileUI(slotNum) {
+  const selectionState = document.getElementById("widget-selection-state");
+  const profileState = document.getElementById("widget-profile-state");
+  const avatarNum = document.getElementById("profile-avatar-num");
+  const profileName = document.querySelector("#widget-profile-state h4");
+  const roleBadge = document.getElementById("profile-role-badge");
+  const cardLayout = document.getElementById("profile-card-layout");
 
-function unlockFormsForMembers() {
-  const memoryForm = document.getElementById("memory-form");
-  if (memoryForm) {
-    toggleFormInputsState(memoryForm, false);
-    clearLockOverlay(memoryForm);
-  }
-  const capsuleForm = document.getElementById("capsule-form");
-  if (capsuleForm) {
-    toggleFormInputsState(capsuleForm, false);
-    clearLockOverlay(capsuleForm);
-  }
-}
+  if (avatarNum) avatarNum.innerText = slotNum;
+  if (profileName) profileName.innerText = `Thành viên số ${slotNum}`;
+  if (roleBadge) roleBadge.innerText = "✨ THÀNH VIÊN LỚP";
 
-function toggleFormInputsState(formElement, isDisable) {
-  const inputs = formElement.querySelectorAll(
-    "input, textarea, select, button",
-  );
-  inputs.forEach((el) => {
-    el.disabled = isDisable;
-    if (isDisable) el.classList.add("opacity-50", "cursor-not-allowed");
-    else el.classList.remove("opacity-50", "cursor-not-allowed");
-  });
-}
-
-function attachLockOverlay(formElement, textMessage) {
-  clearLockOverlay(formElement);
-  formElement.classList.add("relative");
-  const overlay = document.createElement("div");
-  overlay.className =
-    "custom-form-lock-overlay absolute inset-0 bg-white/80 backdrop-blur-[1px] flex items-center justify-center text-center p-4 rounded-2xl z-10 select-none";
-  overlay.innerHTML = `
-    <div class="bg-amber-50 border border-amber-200 text-amber-900 p-3 rounded-xl max-w-xs shadow-sm">
-      <i class="fa-solid fa-lock text-base text-amber-600 mb-1"></i>
-      <p class="text-[11px] font-semibold">${textMessage}</p>
-    </div>
-  `;
-  formElement.appendChild(overlay);
-}
-
-function clearLockOverlay(formElement) {
-  const existingOverlays = formElement.querySelectorAll(
-    ".custom-form-lock-overlay",
-  );
-  existingOverlays.forEach((overlay) => overlay.remove());
-}
-
-function setupFormActions() {
-  const memBtn = document.getElementById("submit-memory-btn");
-  if (memBtn) {
-    memBtn.onclick = async () => {
-      const author = document.getElementById("memory-author").value.trim();
-      const tag = document.getElementById("memory-tag").value.trim();
-      const content = document.getElementById("memory-content").value.trim();
-      if (!author || !content)
-        return alert("Vui lòng điền đủ tên và nội dung kỷ niệm.");
-      try {
-        if (window._firebaseHelpers) {
-          await window._firebaseHelpers.addDocTo("memories", {
-            author,
-            tag,
-            content,
-            timestamp: Date.now(),
-          });
-          document.getElementById("memory-content").value = "";
-          alert("Đã gửi kỷ niệm thành công!");
-        }
-      } catch (err) {
-        alert("Lỗi khi gửi: " + err.message);
-      }
-    };
+  if (slotNum === SPECIAL_ADMIN_SLOT && cardLayout && profileName && roleBadge) {
+    cardLayout.className = "flex items-center gap-2 bg-gradient-to-r from-amber-500 via-orange-400 to-yellow-300 p-1.5 rounded-lg border border-amber-400 text-white shadow-md animate-pulse";
+    profileName.className = "text-[11px] font-black text-white truncate leading-tight";
+    profileName.innerText = "Cô Chủ Nhiệm";
+    roleBadge.innerText = "👑 ĐIỀU HÀNH HỆ THỐNG";
+    roleBadge.className = "text-[8px] uppercase tracking-widest text-amber-100 font-black leading-none mt-0.5";
   }
 
-  const capBtn = document.getElementById("submit-capsule-btn");
-  if (capBtn) {
-    capBtn.onclick = async () => {
-      const author = document.getElementById("capsule-author").value.trim();
-      const email = document.getElementById("capsule-email").value.trim();
-      const content = document.getElementById("capsule-content").value.trim();
-      if (!author || !content)
-        return alert("Vui lòng nhập tên người gửi và nội dung thư.");
-      try {
-        if (window._firebaseHelpers) {
-          await window._firebaseHelpers.addDocTo("capsules", {
-            author,
-            email,
-            content,
-            timestamp: Date.now(),
-          });
-          document.getElementById("capsule-content").value = "";
-          alert("Đã niêm phong thư tương lai thành công!");
-        }
-      } catch (err) {
-        alert("Lỗi: " + err.message);
-      }
-    };
-  }
+  if (selectionState) selectionState.classList.add("hidden");
+  if (profileState) profileState.classList.remove("hidden");
 }
 
-export function initAuthShim() {}
-export function bindAuthEvents() {}
+// 6. HÀM SỬA LỜI NHẮC (ADMIN 52)
+window.openEditNoticeModal = async function() {
+  if (!checkAuth()) return;
+  const currentNotice = document.getElementById("marquee-text-content").innerText;
+  const newNotice = prompt("📝 NHẬP NỘI DUNG LỜI NHẮC NHỞ CHO TOÀN LỚP:", currentNotice);
+  
+  if (newNotice === null) return;
+  if (!newNotice.trim()) {
+    alert("Nội dung không được để trống!");
+    return;
+  }
+
+  if (window.FB_FIRESTORE && window.db && window.basePath) {
+    const { doc, setDoc } = window.FB_FIRESTORE;
+    const noticeDocRef = doc(window.db, ...window.basePath, "system_notice");
+    try {
+      await setDoc(noticeDocRef, {
+        text: newNotice.trim(),
+        timestamp: Date.now()
+      });
+      alert("Đã cập nhật bảng tin lớp học thành công!");
+    } catch(err) {
+      alert("Không thể lưu: " + err.message);
+    }
+  }
+};

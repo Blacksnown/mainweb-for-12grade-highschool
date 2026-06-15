@@ -1,79 +1,66 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import {
-  getFirestore,
-  collection,
-  onSnapshot,
-  addDoc,
+import { 
+  getFirestore, 
+  collection, 
+  onSnapshot, 
+  addDoc, 
+  doc,
+  setDoc,
+  query, 
+  orderBy 
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-// Khai báo biến toàn cục trong module để export
-let auth = null;
-let db = null;
-
 export async function runFirebaseInit() {
-  const appId = typeof __app_id !== "undefined" ? __app_id : "119414904690";
-
-  const rawConfig =
-    typeof __firebase_config !== "undefined"
-      ? __firebase_config
-      : {
-          apiKey: "AIzaSyD1uUTctPo44ZAXzXWHUrdmKAqQinZT9zA",
-          authDomain: "thanhxuancomotlan.firebaseapp.com",
-          projectId: "thanhxuancomotlan",
-          storageBucket: "thanhxuancomotlan.firebasestorage.app",
-          messagingSenderId: "119414904690",
-          appId: "1:119414904690:web:eb1ef88429e71ec912ba0d",
-        };
+  const rawConfig = {
+    apiKey: "AIzaSyD1uUTctPo44ZAXzXWHUrdmKAqQinZT9zA",
+    authDomain: "thanhxuancomotlan.firebaseapp.com",
+    projectId: "thanhxuancomotlan",
+    storageBucket: "thanhxuancomotlan.firebasestorage.app",
+    messagingSenderId: "119414904690",
+    appId: "1:119414904690:web:eb1ef88429e71ec912ba0d",
+  };
 
   try {
     const app = initializeApp(rawConfig);
+    const db = getFirestore(app);
 
-    // Gán giá trị cho các biến module
-    auth = getAuth(app);
-    db = getFirestore(app);
-
-    // Cấu hình môi trường window toàn cục cho script.js sử dụng
-    window.auth = auth;
+    // Xuất ra cửa sổ toàn cục window để script.js đọc được dễ dàng
     window.db = db;
-    window.basePath = ["artifacts", appId, "public", "data"];
+    window.basePath = ["thanhxuan_data"]; // Tên bộ sưu tập gốc của bạn
+    window.FB_FIRESTORE = { collection, onSnapshot, addDoc, doc, setDoc, query, orderBy };
 
-    console.log("-> [Firebase] Khởi tạo hệ thống thành công!");
+    console.log("-> [Firebase] Kết nối hệ thống đám mây thành công!");
 
-    // LẮNG NGHE DANH SÁCH DO ADMIN NHẬP TAY TRÊN DATABASE
-    if (window.db) {
-      const slotsColRef = collection(
-        window.db,
-        ...window.basePath,
-        "member_slots",
-      );
-      onSnapshot(slotsColRef, (snapshot) => {
-        const slotsData = {};
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          const name = data.name || data.claimedBy || "";
-          if (name) {
-            slotsData[parseInt(doc.id)] = name;
-          }
-        });
-        if (typeof window.updateSlotsUI === "function") {
-          window.updateSlotsUI(slotsData);
-        }
+    // Kích hoạt lắng nghe dữ liệu album ảnh chung Real-time
+    const albumColRef = collection(db, ...window.basePath, "album");
+    const qAlbum = query(albumColRef, orderBy("timestamp", "desc"));
+    
+    onSnapshot(qAlbum, (snapshot) => {
+      const grid = document.getElementById("photo-gallery-grid");
+      if (!grid) return;
+      grid.innerHTML = "";
+
+      let hasPhoto = false;
+      snapshot.forEach((doc) => {
+        hasPhoto = true;
+        const data = doc.data();
+        const item = document.createElement("div");
+        item.className = "bg-white border border-brand-200/60 p-2 rounded-xl shadow-sm space-y-1 animate-fade-in";
+        item.innerHTML = `
+          <img src="${data.imageSrc}" class="w-full aspect-video object-cover rounded-lg shadow-inner" alt="Kỷ niệm"/>
+          <p class="text-[10px] text-neutral-600 font-medium truncate flex items-center gap-1 pt-1">
+            <i class="fa-solid fa-camera text-brand-700"></i> ${data.author || "Thành viên ẩn danh"}
+          </p>
+        `;
+        grid.appendChild(item);
       });
-    }
+
+      if (!hasPhoto) {
+        grid.innerHTML = `<div class="col-span-full text-center text-xs text-neutral-400 py-6">Chưa có bức ảnh kỷ niệm nào. Hãy là người đăng đầu tiên!</div>`;
+      }
+    });
+
   } catch (error) {
     console.error("-> [Firebase] Lỗi kết nối cấu hình:", error);
   }
-
-  window._firebaseHelpers = {
-    addDocTo: async (col, payload) => {
-      if (!window.db) throw new Error("Hệ thống Database chưa sẵn sàng.");
-      return await addDoc(
-        collection(window.db, ...window.basePath, col),
-        payload,
-      );
-    },
-  };
 }
-
-export { auth, db };
