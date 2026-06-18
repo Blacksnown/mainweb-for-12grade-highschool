@@ -5,32 +5,53 @@
   <div id="widget-selection-state" class="space-y-1.5">
     <div class="flex items-center gap-1 pb-1 border-b border-brand-100">
       <i class="fa-solid fa-id-badge text-brand-700 text-xs"></i>
-      <span class="text-[11px] font-bold text-brand-900 uppercase tracking-wider">Định danh lớp (1-52)</span>
+      <span
+        class="text-[11px] font-bold text-brand-900 uppercase tracking-wider"
+        >Định danh lớp (1-52)</span
+      >
     </div>
-    
+
     <div class="pt-0.5">
       <select
         id="slots-dropdown-container"
         onchange="handleSelectSlot(this.value)"
         class="w-full bg-brand-50 border border-brand-200 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-lg py-1 px-2 text-[11px] font-medium text-brand-900 outline-none transition-all cursor-pointer"
       >
-        <option value="">-- Tải dữ liệu lớp... --</option>
+        <option value="">Hello world</option>
       </select>
     </div>
   </div>
 
   <div id="widget-profile-state" class="hidden animate-fade-in">
-    <div id="profile-card-layout" class="flex items-center gap-2 bg-gradient-to-br from-brand-100 to-brand-50 p-1.5 rounded-lg border border-brand-200/50">
-      <div class="w-6 h-6 bg-brand-700 text-white rounded-full flex items-center justify-center font-bold text-[11px] shadow-sm shrink-0" id="profile-avatar-num">
+    <div
+      id="profile-card-layout"
+      class="flex items-center gap-2 bg-gradient-to-br from-brand-100 to-brand-50 p-1.5 rounded-lg border border-brand-200/50"
+    >
+      <div
+        class="w-6 h-6 bg-brand-700 text-white rounded-full flex items-center justify-center font-bold text-[11px] shadow-sm shrink-0"
+        id="profile-avatar-num"
+      >
         --
       </div>
       <div class="min-w-0 flex-1">
         <h4 class="text-[11px] font-bold text-brand-900 truncate leading-tight">
           Đang tải...
         </h4>
-        <p id="profile-role-badge" class="text-[8px] uppercase tracking-widest text-brand-400 font-bold leading-none mt-0.5">Thành viên</p>
+        <p
+          id="profile-role-badge"
+          class="text-[8px] uppercase tracking-widest text-brand-400 font-bold leading-none mt-0.5"
+        >
+          Thành viên
+        </p>
       </div>
-      <button onclick="localStorage.removeItem('user_claimed_slot'); window.location.reload();" class="text-neutral-400 hover:text-red-500 text-[10px] px-1" title="Chọn lại số">
+      <button
+        onclick="
+          localStorage.removeItem('user_claimed_slot');
+          window.location.reload();
+        "
+        class="text-neutral-400 hover:text-red-500 text-[10px] px-1"
+        title="Chọn lại số"
+      >
         <i class="fa-solid fa-arrow-rotate-left"></i>
       </button>
     </div>

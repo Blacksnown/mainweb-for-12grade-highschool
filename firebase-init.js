@@ -1,13 +1,13 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-import { 
-  getFirestore, 
-  collection, 
-  onSnapshot, 
-  addDoc, 
+import {
+  getFirestore,
+  collection,
+  onSnapshot,
+  addDoc,
   doc,
   setDoc,
-  query, 
-  orderBy 
+  query,
+  orderBy,
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 export async function runFirebaseInit() {
@@ -24,30 +24,38 @@ export async function runFirebaseInit() {
     const app = initializeApp(rawConfig);
     const db = getFirestore(app);
 
-    // Xuất ra cửa sổ toàn cục window để script.js đọc được dễ dàng
     window.db = db;
-    window.basePath = ["thanhxuan_data"]; // Tên bộ sưu tập gốc của bạn
-    window.FB_FIRESTORE = { collection, onSnapshot, addDoc, doc, setDoc, query, orderBy };
+    window.basePath = [];
+    window.FB_FIRESTORE = {
+      collection,
+      onSnapshot,
+      addDoc,
+      doc,
+      setDoc,
+      query,
+      orderBy,
+    };
+    window.dispatchEvent(new Event("firebaseInitialized"));
 
     console.log("-> [Firebase] Kết nối hệ thống đám mây thành công!");
 
-    // Kích hoạt lắng nghe dữ liệu album ảnh chung Real-time
-    const albumColRef = collection(db, ...window.basePath, "album");
+    const albumColRef = collection(db, "album");
     const qAlbum = query(albumColRef, orderBy("timestamp", "desc"));
-    
+
     onSnapshot(qAlbum, (snapshot) => {
-      const grid = document.getElementById("photo-gallery-grid");
+      const grid = document.getElementById("photos-grid");
       if (!grid) return;
       grid.innerHTML = "";
 
       let hasPhoto = false;
-      snapshot.forEach((doc) => {
+      snapshot.forEach((docSnap) => {
         hasPhoto = true;
-        const data = doc.data();
+        const data = docSnap.data();
         const item = document.createElement("div");
-        item.className = "bg-white border border-brand-200/60 p-2 rounded-xl shadow-sm space-y-1 animate-fade-in";
+        item.className =
+          "bg-white border border-brand-200/60 p-2 rounded-xl shadow-sm space-y-1 animate-fade-in";
         item.innerHTML = `
-          <img src="${data.imageSrc}" class="w-full aspect-video object-cover rounded-lg shadow-inner" alt="Kỷ niệm"/>
+          <img src="${data.imageSrc || ""}" class="w-full aspect-video object-cover rounded-lg shadow-inner" alt="Kỷ niệm"/>
           <p class="text-[10px] text-neutral-600 font-medium truncate flex items-center gap-1 pt-1">
             <i class="fa-solid fa-camera text-brand-700"></i> ${data.author || "Thành viên ẩn danh"}
           </p>
@@ -59,7 +67,6 @@ export async function runFirebaseInit() {
         grid.innerHTML = `<div class="col-span-full text-center text-xs text-neutral-400 py-6">Chưa có bức ảnh kỷ niệm nào. Hãy là người đăng đầu tiên!</div>`;
       }
     });
-
   } catch (error) {
     console.error("-> [Firebase] Lỗi kết nối cấu hình:", error);
   }
