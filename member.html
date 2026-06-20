@@ -17,7 +17,7 @@
         onchange="handleSelectSlot(this.value)"
         class="w-full bg-brand-50 border border-brand-200 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-lg py-1 px-2 text-[11px] font-medium text-brand-900 outline-none transition-all cursor-pointer"
       >
-        <option value="">Hello world</option>
+        <option value="">-- Đang tải danh sách... --</option>
       </select>
     </div>
   </div>
@@ -44,15 +44,13 @@
           Thành viên
         </p>
       </div>
+
       <button
-        onclick="
-          localStorage.removeItem('user_claimed_slot');
-          window.location.reload();
-        "
-        class="text-neutral-400 hover:text-red-500 text-[10px] px-1"
-        title="Chọn lại số"
+        onclick="handleLogoutSlot()"
+        class="text-neutral-400 hover:text-red-500 p-1 transition-colors text-[10px]"
+        title="Thoát định danh"
       >
-        <i class="fa-solid fa-arrow-rotate-left"></i>
+        <i class="fa-solid fa-right-from-bracket"></i>
       </button>
     </div>
   </div>

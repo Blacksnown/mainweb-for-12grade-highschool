@@ -2062,32 +2062,24 @@ service cloud.firestore {
         });
     </script>
 
-    <script type="module">
-      import { runFirebaseInit } from "./firebase-init.js";
-      runFirebaseInit();
-    </script>
 
-    <!-- 
-        ==================================================================================
-        MÔ-ĐUN FIREBASE (Dễ dàng sao chép / tách ra file "firebase.js" độc lập khi chạy local)
-        ==================================================================================
-    -->
-    <!-- REMOVED embedded firebase-connection module -->
-    <!-- Firebase is now initialized via firebase-init.js and started by script.js -->
-    <script type="module">
-      import { runFirebaseInit } from "./firebase-init.js";
-      runFirebaseInit();
-    </script>
-    <div id="slots-component-placeholder"></div>
+<div id="slots-component-placeholder"></div>
     <script>
+      // 1. Định nghĩa hàm nạp giao diện ô chọn số an toàn
       async function loadSlotsComponent() {
         try {
-          // GỌI CHÍNH XÁC ĐẾN FILE member.html MÀ BẠN ĐÃ TẢI LÊN
           const response = await fetch("./member.html");
           if (response.ok) {
-            document.getElementById("slots-component-placeholder").innerHTML =
-              await response.text();
-            window.dispatchEvent(new Event("slotsComponentReady"));
+            // Đưa giao diện vào trang chủ
+            document.getElementById("slots-component-placeholder").innerHTML = await response.text();
+            console.log("-> [DOM] Đã dựng xong giao diện member.html");
+            
+            // 2. CHỈ KHI ĐÃ CÓ GIAO DIỆN: Tiến hành nạp file logic script.js để dựng 52 số
+            const mainScript = document.createElement("script");
+            mainScript.type = "module";
+            mainScript.src = "script.js";
+            document.body.appendChild(mainScript);
+            
           } else {
             console.error("Không thể tải tệp mã nguồn thành phần member.html");
           }
@@ -2095,8 +2087,14 @@ service cloud.firestore {
           console.error("Lỗi kết nối thành phần chọn số:", error);
         }
       }
+      // Kích hoạt nạp bộ khung trước tiên
       loadSlotsComponent();
     </script>
-    <script type="module" src="script.js"></script>
+    <script type="module">
+      import { runFirebaseInit } from "./firebase-init.js";
+      runFirebaseInit();
+    </script>
+  </body>
+</html>
   </body>
 </html>
