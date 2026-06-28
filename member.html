@@ -1,18 +1,20 @@
 <div
   id="member-slots-widget"
-  class="fixed top-20 right-4 z-50 max-w-[220px] w-full bg-white/95 backdrop-blur-md border border-brand-200 p-2.5 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl"
+  class="fixed top-20 right-4 z-50 max-w-[195px] w-full bg-white/95 backdrop-blur-md border border-brand-200 p-2 rounded-xl shadow-lg transition-shadow duration-300 hover:shadow-xl select-none touch-none"
+  style="cursor: move;"
 >
-  <div id="widget-selection-state" class="space-y-2">
-    <div class="flex items-center gap-1 pb-1 border-b border-brand-100">
-      <i class="fa-solid fa-id-badge text-brand-700 text-xs"></i>
-      <span class="text-[11px] font-bold text-brand-900 uppercase tracking-wider">Định danh lớp (1-52)</span>
+  <div id="widget-selection-state" class="space-y-1.5">
+    <div class="flex items-center gap-1 pb-1 border-b border-brand-100 cursor-move">
+      <i class="fa-solid fa-id-badge text-brand-700 text-[10px]"></i>
+      <span class="text-[10px] font-bold text-brand-900 uppercase tracking-wider flex-1">Định danh lớp (1-52)</span>
+      <i class="fa-solid fa-grip-vertical text-neutral-400 text-[9px]"></i>
     </div>
 
     <div class="pt-0.5">
       <select
         id="slots-dropdown-container"
-        onchange="handleSelectSlot(this.value)"
-        class="w-full bg-brand-50 border border-brand-200 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-lg py-1 px-2 text-[11px] font-medium text-brand-900 outline-none transition-all cursor-pointer"
+        onchange= "handleSelectSlot(this.value)"
+        class="w-full bg-brand-50 border border-brand-200 focus:border-brand-700 focus:ring-1 focus:ring-brand-700 rounded-lg py-1 px-1.5 text-[10.5px] font-medium text-brand-900 outline-none transition-all cursor-pointer"
       >
         <option value="">-- Đang tải danh sách... --</option>
       </select>
@@ -22,34 +24,99 @@
   </div>
 
   <div id="widget-profile-state" class="hidden animate-fade-in space-y-1.5">
+    <div class="flex items-center gap-1 pb-1 border-b border-brand-100 cursor-move">
+      <i class="fa-solid fa-id-badge text-brand-700 text-[10px]"></i>
+      <span class="text-[10px] font-bold text-brand-900 uppercase tracking-wider flex-1">Định danh lớp (1-52)</span>
+      <i class="fa-solid fa-grip-vertical text-neutral-400 text-[9px]"></i>
+    </div>
+
     <div
       id="profile-card-layout"
-      class="flex items-center gap-2 bg-gradient-to-br from-brand-100 to-brand-50 p-1.5 rounded-lg border border-brand-200/50"
+      class="flex items-center gap-1.5 bg-gradient-to-br from-brand-100 to-brand-50 p-1.5 rounded-lg border border-brand-200/50"
     >
       <div
-        class="w-6 h-6 bg-brand-700 text-white rounded-full flex items-center justify-center font-bold text-[11px] shadow-sm shrink-0"
+        class="w-5 h-5 bg-brand-700 text-white rounded-full flex items-center justify-center font-bold text-[10px] shadow-sm shrink-0"
         id="profile-avatar-num"
       >
         --
       </div>
       <div class="min-w-0 flex-1">
-        <h4 class="text-[11px] font-bold text-brand-900 truncate leading-tight">
+        <h4 id="profile-name-display" class="text-[10.5px] font-bold text-brand-900 truncate leading-tight">
           Đang tải...
         </h4>
         <p
           id="profile-role-badge"
-          class="text-[8px] uppercase tracking-widest text-brand-400 font-bold leading-none mt-0.5"
+          class="text-[7.5px] uppercase tracking-widest text-brand-400 font-bold leading-none mt-0.5"
         >
-          Thành viên Lớp
+          Thành viên
         </p>
       </div>
     </div>
-    
-    <button
-      onclick="handleLogoutSlot()"
-      class="w-full border border-red-200 hover:bg-red-50 text-red-500 font-medium text-[10px] py-1 rounded-lg transition-all shadow-sm text-center block"
-    >
-      <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Thoát định danh
-    </button>
+    <div id="profile-action-button-container" class="w-full"></div>
   </div>
 </div>
+
+<script>
+  (function() {
+    const widget = document.getElementById("member-slots-widget");
+    if (!widget) return;
+    
+    let isDragging = false;
+    let currentX = 0;
+    let currentY = 0;
+    let initialX = 0;
+    let initialY = 0;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    // Lắng nghe sự kiện kéo trên toàn bộ khung nhưng loại trừ tương tác Form dữ liệu
+    widget.addEventListener("touchstart", dragStart, { passive: false });
+    window.addEventListener("touchend", dragEnd, { passive: true });
+    window.addEventListener("touchmove", drag, { passive: false });
+
+    widget.addEventListener("mousedown", dragStart);
+    window.addEventListener("mouseup", dragEnd);
+    window.addEventListener("mousemove", drag);
+
+    function dragStart(e) {
+      // Bỏ qua kéo nếu bấm nhầm vào nút, ô chọn hoặc danh sách xổ xuống
+      if (e.target.closest('select') || e.target.closest('button') || e.target.closest('a')) {
+        return;
+      }
+
+      if (e.type === "touchstart") {
+        initialX = e.touches[0].clientX - xOffset;
+        initialY = e.touches[0].clientY - yOffset;
+      } else {
+        initialX = e.clientX - xOffset;
+        initialY = e.clientY - yOffset;
+      }
+      isDragging = true;
+    }
+
+    function dragEnd() {
+      initialX = currentX;
+      initialY = currentY;
+      isDragging = false;
+    }
+
+    function drag(e) {
+      if (!isDragging) return;
+      e.preventDefault();
+
+      if (e.type === "touchmove") {
+        currentX = e.touches[0].clientX - initialX;
+        currentY = e.touches[0].clientY - initialY;
+      } else {
+        currentX = e.clientX - initialX;
+        currentY = e.clientY - initialY;
+      }
+
+      xOffset = currentX;
+      yOffset = currentY;
+
+      // Di chuyển mượt bằng Translate3D tiết kiệm tài nguyên RAM điện thoại
+      widget.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+    }
+  })();
+</script>
