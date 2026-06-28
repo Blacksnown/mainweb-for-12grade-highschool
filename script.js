@@ -1,7 +1,7 @@
 const START_SLOT = 1;
 const END_SLOT = 52;
 const SPECIAL_NOTIFY_SLOT = 52;
-let SLOT_ACCOUNTS = {}
+let SLOT_ACCOUNTS = {};
 let chosenSlotNumber = localStorage.getItem("user_claimed_slot");
 if (chosenSlotNumber !== null) {
   chosenSlotNumber = parseInt(chosenSlotNumber, 10);
@@ -540,6 +540,106 @@ function renderMembers() {
   });
 }
 
+// Enable dragging and resizing for the member slots widget (pointer-friendly)
+function initWidgetDragResize() {
+  try {
+    const widget = document.getElementById("member-slots-widget");
+    if (!widget || widget.__dragResizeInitialized) return;
+    widget.__dragResizeInitialized = true;
+
+    // Ensure widget is positioned for left/top control
+    widget.style.position = widget.style.position || "fixed";
+    widget.style.touchAction = "none";
+    widget.style.userSelect = "none";
+    // Make the widget smaller by default for compact UI
+    widget.style.minWidth = widget.style.minWidth || "110px";
+    widget.style.width = widget.style.width || "130px";
+    widget.style.maxWidth = widget.style.maxWidth || "50vw";
+
+    // Create resizer handle
+    const resizer = document.createElement("div");
+    resizer.id = "widget-resizer";
+    resizer.style.width = "12px";
+    resizer.style.height = "12px";
+    resizer.style.position = "absolute";
+    resizer.style.right = "6px";
+    resizer.style.bottom = "6px";
+    resizer.style.cursor = "se-resize";
+    resizer.style.borderRadius = "4px";
+    resizer.style.background = "rgba(0,0,0,0.06)";
+    resizer.style.zIndex = "9999";
+    resizer.style.touchAction = "none";
+    widget.appendChild(resizer);
+
+    // Make header draggable (use first header-like bar)
+    const header = widget.querySelector(".flex.items-center") || widget;
+    header.style.cursor = "move";
+
+    let dragState = null;
+
+    function onPointerDownDrag(e) {
+      if (e.button && e.button !== 0) return;
+      e.preventDefault();
+      const rect = widget.getBoundingClientRect();
+      // switch to left/top positioning
+      if (widget.style.right && !widget.style.left) {
+        widget.style.left = rect.left + "px";
+        widget.style.top = rect.top + "px";
+        widget.style.right = "auto";
+      }
+      dragState = {
+        startX: e.clientX,
+        startY: e.clientY,
+        startLeft: parseFloat(widget.style.left || rect.left),
+        startTop: parseFloat(widget.style.top || rect.top),
+      };
+      document.addEventListener("pointermove", onPointerMoveDrag);
+      document.addEventListener("pointerup", onPointerUpDrag, { once: true });
+    }
+
+    function onPointerMoveDrag(e) {
+      if (!dragState) return;
+      const dx = e.clientX - dragState.startX;
+      const dy = e.clientY - dragState.startY;
+      widget.style.left = Math.max(8, dragState.startLeft + dx) + "px";
+      widget.style.top = Math.max(8, dragState.startTop + dy) + "px";
+    }
+
+    function onPointerUpDrag() {
+      dragState = null;
+      document.removeEventListener("pointermove", onPointerMoveDrag);
+    }
+
+    function onPointerDownResize(e) {
+      e.preventDefault();
+      const rect = widget.getBoundingClientRect();
+      const start = {
+        x: e.clientX,
+        y: e.clientY,
+        w: rect.width,
+        h: rect.height,
+      };
+      function move(ev) {
+        const dx = ev.clientX - start.x;
+        const dy = ev.clientY - start.y;
+        widget.style.width = Math.max(120, start.w + dx) + "px";
+        widget.style.height = Math.max(80, start.h + dy) + "px";
+      }
+      function up() {
+        document.removeEventListener("pointermove", move);
+        document.removeEventListener("pointerup", up);
+      }
+      document.addEventListener("pointermove", move);
+      document.addEventListener("pointerup", up, { once: true });
+    }
+
+    header.addEventListener("pointerdown", onPointerDownDrag);
+    resizer.addEventListener("pointerdown", onPointerDownResize);
+  } catch (err) {
+    console.warn("initWidgetDragResize error:", err);
+  }
+}
+
 // ==========================================
 // KHỞI CHẠY ĐỒNG BỘ ỔN ĐỊNH
 // ==========================================
@@ -547,11 +647,13 @@ enforceFeatureLockUI();
 
 window.addEventListener("slotsComponentReady", () => {
   updateWidgetProfileUI();
+  initWidgetDragResize();
   initFirestoreRealtime();
 });
 
 if (document.getElementById("slots-dropdown-container")) {
   updateWidgetProfileUI();
+  initWidgetDragResize();
   initFirestoreRealtime();
 }
 
