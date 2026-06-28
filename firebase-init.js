@@ -6,9 +6,19 @@ import {
   addDoc,
   doc,
   setDoc,
+  deleteDoc,
+  getDoc,
+  getDocs,
   query,
+  where,
   orderBy,
 } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
 export async function runFirebaseInit() {
   const rawConfig = {
@@ -23,8 +33,10 @@ export async function runFirebaseInit() {
   try {
     const app = initializeApp(rawConfig);
     const db = getFirestore(app);
+    const auth = getAuth(app);
 
     window.db = db;
+    window.auth = auth;
     window.basePath = [];
     window.FB_FIRESTORE = {
       collection,
@@ -32,8 +44,17 @@ export async function runFirebaseInit() {
       addDoc,
       doc,
       setDoc,
+      deleteDoc,
+      getDoc,
+      getDocs,
       query,
+      where,
       orderBy,
+    };
+    window.FB_AUTH = {
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
     };
     window.dispatchEvent(new Event("firebaseInitialized"));
 

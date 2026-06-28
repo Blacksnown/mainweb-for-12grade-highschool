@@ -2,13 +2,10 @@
   id="member-slots-widget"
   class="fixed top-20 right-4 z-50 max-w-[220px] w-full bg-white/95 backdrop-blur-md border border-brand-200 p-2.5 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl"
 >
-  <div id="widget-selection-state" class="space-y-1.5">
+  <div id="widget-selection-state" class="space-y-2">
     <div class="flex items-center gap-1 pb-1 border-b border-brand-100">
       <i class="fa-solid fa-id-badge text-brand-700 text-xs"></i>
-      <span
-        class="text-[11px] font-bold text-brand-900 uppercase tracking-wider"
-        >Định danh lớp (1-52)</span
-      >
+      <span class="text-[11px] font-bold text-brand-900 uppercase tracking-wider">Định danh lớp (1-52)</span>
     </div>
 
     <div class="pt-0.5">
@@ -20,9 +17,11 @@
         <option value="">-- Đang tải danh sách... --</option>
       </select>
     </div>
+    
+    <div id="widget-action-button-container" class="w-full"></div>
   </div>
 
-  <div id="widget-profile-state" class="hidden animate-fade-in">
+  <div id="widget-profile-state" class="hidden animate-fade-in space-y-1.5">
     <div
       id="profile-card-layout"
       class="flex items-center gap-2 bg-gradient-to-br from-brand-100 to-brand-50 p-1.5 rounded-lg border border-brand-200/50"
@@ -41,17 +40,16 @@
           id="profile-role-badge"
           class="text-[8px] uppercase tracking-widest text-brand-400 font-bold leading-none mt-0.5"
         >
-          Thành viên
+          Thành viên Lớp
         </p>
       </div>
-
-      <button
-        onclick="handleLogoutSlot()"
-        class="text-neutral-400 hover:text-red-500 p-1 transition-colors text-[10px]"
-        title="Thoát định danh"
-      >
-        <i class="fa-solid fa-right-from-bracket"></i>
-      </button>
     </div>
+    
+    <button
+      onclick="handleLogoutSlot()"
+      class="w-full border border-red-200 hover:bg-red-50 text-red-500 font-medium text-[10px] py-1 rounded-lg transition-all shadow-sm text-center block"
+    >
+      <i class="fa-solid fa-arrow-right-from-bracket mr-1"></i> Thoát định danh
+    </button>
   </div>
 </div>
