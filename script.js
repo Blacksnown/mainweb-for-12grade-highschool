@@ -2,11 +2,14 @@ const START_SLOT = 1;
 const END_SLOT = 52;
 const SPECIAL_NOTIFY_SLOT = 52;
 let SLOT_ACCOUNTS = {};
-let chosenSlotNumber = localStorage.getItem("user_claimed_slot");
+let chosenSlotNumber = sessionStorage.getItem("user_claimed_slot");
 if (chosenSlotNumber !== null) {
   chosenSlotNumber = parseInt(chosenSlotNumber, 10);
 }
 let temporarySelectedSlot = null;
+let currentSlotPresenceRef = null;
+let currentSlotPresenceInterval = null;
+const SLOT_PRESENCE_HEARTBEAT_MS = 15000;
 window.currentMemoryFilter = "all";
 window.ADMIN_EMAIL = window.ADMIN_EMAIL || "vanh3579#@gmail.com";
 window.ADMIN_UID = window.ADMIN_UID || "1xuZEHo6N7ZJcyDEIPDJtXaCBuG3";
@@ -130,6 +133,89 @@ function waitForFirebaseReady(timeoutMs = 7000) {
   });
 }
 
+const SLOT_PRESENCE_TTL_MS = 30000;
+
+async function claimSlotPresence(slot) {
+  if (!slot || !window.db || !window.FB_FIRESTORE) return;
+  try {
+    currentSlotPresenceRef = window.FB_FIRESTORE.doc(
+      window.db,
+      "slots",
+      String(slot),
+    );
+    await window.FB_FIRESTORE.setDoc(currentSlotPresenceRef, {
+      slotIndex: slot,
+      timestamp: Date.now(),
+    });
+  } catch (err) {
+    console.warn("Không thể cập nhật trạng thái slot:", err);
+  }
+}
+
+async function releaseSlotPresence() {
+  if (!currentSlotPresenceRef || !window.db || !window.FB_FIRESTORE) return;
+  try {
+    await window.FB_FIRESTORE.deleteDoc(currentSlotPresenceRef);
+  } catch (err) {
+    console.warn("Không thể xóa trạng thái slot:", err);
+  }
+  currentSlotPresenceRef = null;
+  if (currentSlotPresenceInterval) {
+    clearInterval(currentSlotPresenceInterval);
+    currentSlotPresenceInterval = null;
+  }
+}
+
+function startSlotPresenceHeartbeat() {
+  if (
+    !chosenSlotNumber ||
+    !currentSlotPresenceRef ||
+    !window.db ||
+    !window.FB_FIRESTORE
+  )
+    return;
+  if (currentSlotPresenceInterval) {
+    clearInterval(currentSlotPresenceInterval);
+  }
+  currentSlotPresenceInterval = setInterval(() => {
+    if (chosenSlotNumber && currentSlotPresenceRef) {
+      window.FB_FIRESTORE.setDoc(currentSlotPresenceRef, {
+        slotIndex: chosenSlotNumber,
+        timestamp: Date.now(),
+      });
+    }
+  }, SLOT_PRESENCE_HEARTBEAT_MS);
+}
+
+async function activateSlotPresence() {
+  if (!chosenSlotNumber || !window.db || !window.FB_FIRESTORE) return;
+  await claimSlotPresence(chosenSlotNumber);
+  startSlotPresenceHeartbeat();
+}
+
+function refreshSlotOptions() {
+  const selectElement = document.getElementById("slots-dropdown-container");
+  if (!selectElement) return;
+  for (let i = START_SLOT; i <= END_SLOT; i++) {
+    const opt = document.getElementById(`slot-opt-${i}`);
+    if (!opt) continue;
+    const accInfo = SLOT_ACCOUNTS[i] ? ` - ${SLOT_ACCOUNTS[i].name}` : "";
+    opt.innerText =
+      i === SPECIAL_NOTIFY_SLOT
+        ? `Số ${i} - 💬 Thành viên đặc biệt`
+        : `Số định danh: ${i}${accInfo}`;
+
+    // 👇 CHÈN THÊM ĐOẠN NÀY VÀO CUỐI VÒNG LẶP ĐỂ KHÓA Ô ĐÃ CÓ CHỦ
+    // if (SLOT_ACCOUNTS[i]) {
+    //   opt.disabled = true; // Làm mờ và khóa không cho click chọn nữa
+    //   // Mẹo: Nếu muốn ẩn hẳn số đó khỏi danh sách luôn thì dùng dòng dưới thay thế:
+    //   // opt.style.display = "none";
+    // } else {
+    //   opt.disabled = false;
+    // }
+  }
+}
+
 // ==========================================
 // ĐỒNG BỘ DỰNG DROPDOWN VÀ NÚT XÁC NHẬN 2 BƯỚC
 // ==========================================
@@ -215,7 +301,7 @@ function updateWidgetProfileUI() {
         profileCard.className =
           "flex items-center gap-2 bg-gradient-to-r from-amber-500 via-orange-400 to-yellow-300 p-1.5 rounded-lg border border-amber-400 text-white shadow-md";
       if (profileName) profileName.innerText = "Cô Hường";
-      if (roleBadge) roleBadge.innerText = "💬 Thông báo toàn web";
+      if (roleBadge) roleBadge.innerText = "💬 Thành viên đặc biệt";
     } else {
       if (profileCard)
         profileCard.className =
@@ -302,9 +388,12 @@ window.confirmAccessIdentity = async function () {
 
   if (userConfirmed) {
     chosenSlotNumber = temporarySelectedSlot;
-    localStorage.setItem("user_claimed_slot", chosenSlotNumber);
+    // THAY ĐỔI: Sử dụng sessionStorage thay vì localStorage để dữ liệu tự hủy khi tắt tab/trình duyệt
+    sessionStorage.setItem("user_claimed_slot", chosenSlotNumber);
+    await claimSlotPresence(chosenSlotNumber);
+    startSlotPresenceHeartbeat();
     updateWidgetProfileUI();
-    window.location.reload(); // Refresh đồng bộ dữ liệu sạch
+    window.location.reload();
   } else {
     const selectElement = document.getElementById("slots-dropdown-container");
     if (selectElement) selectElement.value = "";
@@ -315,9 +404,11 @@ window.confirmAccessIdentity = async function () {
   }
 };
 
-window.handleLogoutSlot = function () {
+window.handleLogoutSlot = async function () {
   if (confirm("Bạn có chắc chắn muốn thoát quyền định danh hiện tại không?")) {
-    localStorage.removeItem("user_claimed_slot");
+    // THAY ĐỔI: Xóa key từ sessionStorage khi bấm đăng xuất
+    sessionStorage.removeItem("user_claimed_slot");
+    await releaseSlotPresence();
     chosenSlotNumber = null;
     window.location.reload();
   }
@@ -331,8 +422,22 @@ window.openCohuongAnnouncementPrompt = async function () {
     );
     return;
   }
-  const text = prompt("Nhập nội dung thông báo toàn web:");
-  if (!text || text.trim().length === 0) {
+  // Không dùng prompt() cũ nữa, chuyển sang hiển thị Modal HTML đã chuẩn bị sẵn
+  const modal = document.getElementById("cohuong-prompt-modal");
+  const input = document.getElementById("cohuong-modal-input");
+  if (modal && input) {
+    input.value = ""; // Làm sạch ô nhập liệu mỗi khi mở
+    modal.classList.remove("hidden");
+    input.focus();
+  }
+};
+// Hàm xử lý gửi dữ liệu từ Modal lên Firebase (Giữ nguyên cấu trúc logic gốc)
+window.submitCohuongModalAnnouncement = async function () {
+  const input = document.getElementById("cohuong-modal-input");
+  const modal = document.getElementById("cohuong-prompt-modal");
+
+  if (!input || !input.value.trim()) {
+    alert("Vui lòng nhập nội dung trước khi phát!");
     return;
   }
   if (!window.db || !window.FB_FIRESTORE) {
@@ -342,11 +447,14 @@ window.openCohuongAnnouncementPrompt = async function () {
     return;
   }
   try {
+    // Ẩn nhanh giao diện modal tạo cảm giác mượt mà
+    if (modal) modal.classList.add("hidden");
+    // Giữ nguyên luồng kết nối và đẩy dữ liệu lên Firestore như cũ
     await window.FB_FIRESTORE.addDoc(
       window.FB_FIRESTORE.collection(window.db, "cohuongAnnouncements"),
       {
         author: "Cô Hường",
-        message: text.trim(),
+        message: input.value.trim(),
         createdAt: Date.now(),
       },
     );
@@ -386,6 +494,39 @@ window.renderCohuongAnnouncementBanner = function (announcement) {
   banner.classList.remove("hidden");
 };
 
+// window.renderCohuongAnnouncementBanner = function (announcement) {
+//   const dynamicZone = document.getElementById("cohuong-dynamic-zone");
+//   const textEl = document.getElementById("cohuong-zone-text");
+//   const timeEl = document.getElementById("cohuong-zone-time");
+
+//   // Nếu không tìm thấy các thẻ chứa trong HTML, không xử lý tiếp để tránh crash web
+//   if (!dynamicZone || !textEl || !timeEl) return;
+
+//   // Nếu không có thông báo nào từ Firebase, ẩn toàn bộ khu vực này đi
+//   if (!announcement || !announcement.message) {
+//     dynamicZone.classList.add("hidden");
+//     return;
+//   }
+
+//   // Chuyển đổi thời gian đăng sang định dạng giờ Việt Nam thân thiện
+//   const timeText = new Date(announcement.createdAt).toLocaleTimeString(
+//     "vi-VN",
+//     {
+//       hour: "2-digit",
+//       minute: "2-digit",
+//       day: "2-digit",
+//       month: "2-digit",
+//     },
+//   );
+
+//   // Bơm dữ liệu động vào khung trang trí sẵn
+//   textEl.innerText = announcement.message;
+//   timeEl.innerText = `⏱ Đăng lúc: ${timeText}`;
+
+//   // Loại bỏ class 'hidden' để hiển thị khung rực rỡ lên giao diện chính
+//   dynamicZone.classList.remove("hidden");
+// };
+
 // ==========================================
 // ĐỒNG BỘ REALTIME TỪ FIREBASE ĐÁM MÂY
 // ==========================================
@@ -406,7 +547,7 @@ function initFirestoreRealtime() {
         renderMemoryFeed();
       });
 
-      // Realtime hòm thư viên nang
+      // Realtime hòm thư tươnng lai
       const capsulesRef = collection(window.db, "capsules");
       const capsulesQuery = query(capsulesRef, orderBy("timestamp", "desc"));
       onSnapshot(capsulesQuery, (snap) => {
@@ -426,17 +567,25 @@ function initFirestoreRealtime() {
       // Realtime check các ô số đã bị chiếm đóng
       const slotsRef = collection(window.db, "slots");
       onSnapshot(query(slotsRef, orderBy("timestamp", "asc")), (snapshot) => {
+        const slotOptions = document.querySelectorAll("[id^=slot-opt-]");
+        slotOptions.forEach((opt) => {
+          opt.disabled = false;
+          opt.innerText = opt.innerText.replace(/\s*\(❌ Đã nhận\)$/, "");
+        });
+
+        const now = Date.now();
         snapshot.forEach((docSnap) => {
-          const takenSlot = parseInt(docSnap.data().slotIndex, 10);
-          if (takenSlot && takenSlot !== chosenSlotNumber) {
-            const opt = document.getElementById(`slot-opt-${takenSlot}`);
-            if (opt) {
-              if (!opt.innerText.includes(" (❌ Đã nhận)")) {
-                opt.innerText += " (❌ Đã nhận)";
-              }
-              opt.disabled = true;
-            }
-          }
+          const docData = docSnap.data() || {};
+          const lastSeen = parseInt(docData.timestamp, 10) || 0;
+          if (now - lastSeen > SLOT_PRESENCE_TTL_MS) return;
+          const takenSlot =
+            parseInt(docData.slotIndex, 10) || parseInt(docSnap.id, 10);
+          if (!takenSlot || takenSlot === chosenSlotNumber) return;
+          const opt = document.getElementById(`slot-opt-${takenSlot}`);
+          if (!opt) return;
+          const baseText = opt.innerText.replace(/\s*\(❌ Đã nhận\)$/, "");
+          opt.innerText = `${baseText} (❌ Đã nhận)`;
+          opt.disabled = true;
         });
       });
 
@@ -445,26 +594,58 @@ function initFirestoreRealtime() {
       const altMembersCollectionName = "member";
       const membersRef = collection(window.db, membersCollectionName);
       const membersQuery = query(membersRef, orderBy("name", "asc"));
-      onSnapshot(membersQuery, (snap) => {
-        window.allMembers = [];
-        if (snap.empty) {
-          const altMembersRef = collection(window.db, altMembersCollectionName);
-          const altMembersQuery = query(altMembersRef, orderBy("name", "asc"));
-          onSnapshot(altMembersQuery, (altSnap) => {
-            window.allMembers = [];
-            altSnap.forEach((docSnap) => {
-              window.allMembers.push({ id: docSnap.id, ...docSnap.data() });
-            });
-            window.renderMembers?.();
-          });
-          return;
-        }
-        snap.forEach((docSnap) => {
-          window.allMembers.push({ id: docSnap.id, ...docSnap.data() });
-        });
-        window.renderMembers?.();
-      });
+      onSnapshot(
+        membersQuery,
+        (snap) => {
+          window.allMembers = [];
+          SLOT_ACCOUNTS = {};
+          const buildFromDoc = (docSnap) => {
+            const data = docSnap.data() || {};
+            const idMatch = String(docSnap.id).match(/member-(\d+)$/i);
+            const slotIndex = idMatch
+              ? parseInt(idMatch[1], 10)
+              : parseInt(data.slotIndex, 10);
+            if (slotIndex && slotIndex >= START_SLOT && slotIndex <= END_SLOT) {
+              SLOT_ACCOUNTS[slotIndex] = {
+                id: docSnap.id,
+                name: data.name || `Thành viên số ${slotIndex}`,
+                emoji: data.emoji || "",
+                role: data.role || "Thành viên Lớp",
+                ...data,
+              };
+            }
+            window.allMembers.push({ id: docSnap.id, ...data });
+          };
 
+          if (snap.empty) {
+            const altMembersRef = collection(
+              window.db,
+              altMembersCollectionName,
+            );
+            const altMembersQuery = query(
+              altMembersRef,
+              orderBy("name", "asc"),
+            );
+            onSnapshot(altMembersQuery, (altSnap) => {
+              window.allMembers = [];
+              SLOT_ACCOUNTS = {};
+              altSnap.forEach((docSnap) => buildFromDoc(docSnap));
+              refreshSlotOptions();
+              window.renderMembers?.();
+            });
+            return;
+          }
+          snap.forEach((docSnap) => buildFromDoc(docSnap));
+          refreshSlotOptions();
+          window.renderMembers?.();
+        },
+        (error) => {
+          console.error(
+            "Firebase trả về lỗi đối với bảng members rồi bạn ơi:",
+            error,
+          );
+        },
+      );
       // Realtime announcements from Cô Hường
       const announcementsRef = collection(window.db, "cohuongAnnouncements");
       const announcementsQuery = query(
@@ -500,46 +681,59 @@ function renderMemoryFeed() {
   });
 }
 
-function renderMembers() {
+window.renderMembers = function () {
   const grid = document.getElementById("students-grid");
   const countEl = document.getElementById("cnt-members");
   if (!grid) return;
 
-  const members = (window.allMembers || []).slice();
-  if (countEl) countEl.innerText = String(members.length);
-
-  if (members.length === 0) {
-    grid.innerHTML = `<div class="col-span-full rounded-3xl border border-dashed border-brand-200 bg-brand-50/70 py-10 text-center text-xs text-neutral-500">
-        <i class="fa-solid fa-users-slash text-brand-400 text-3xl mb-2"></i>
-        Danh sách thành viên sẽ xuất hiện khi Firestore có dữ liệu.
-      </div>`;
-    return;
-  }
-
+  // Xóa bỏ trạng thái cũ để load lại dữ liệu mới
   grid.innerHTML = "";
-  members.forEach((member) => {
+
+  let totalClaimed = 0;
+
+  // Duyệt qua toàn bộ 52 số định danh lớp học
+  for (let i = 1; i <= 52; i++) {
+    // Lấy thông tin tài khoản từ dữ liệu cấu hình Firebase (SLOT_ACCOUNTS)
+    const account = window.SLOT_ACCOUNTS ? window.SLOT_ACCOUNTS[i] : null;
+
+    // Tạo phần tử hiển thị cho từng vị trí số thứ tự
     const card = document.createElement("div");
     card.className =
-      "rounded-3xl border border-brand-200/70 bg-white p-4 shadow-sm space-y-3";
-    const avatar = (member.emoji || "👋").trim();
-    const avatarHtml = /^https?:\/\//i.test(avatar)
-      ? `<img src="${avatar}" alt="avatar" class="w-12 h-12 rounded-2xl object-cover border border-brand-200/70 shadow-sm" />`
-      : `<div class="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-200/70 flex items-center justify-center text-xl shadow-sm">${avatar}</div>`;
+      "bg-white border border-brand-200/60 rounded-2xl p-4 text-center shadow-sm hover:shadow-md transition-all relative group";
 
-    card.innerHTML = `
-      <div class="flex items-start gap-3">
-        ${avatarHtml}
-        <div class="min-w-0 flex-1">
-          <h4 class="font-serif text-base font-bold text-brand-900 truncate">${member.name || "Thành viên"}</h4>
-          <p class="text-[11px] text-brand-700 font-semibold">${member.nickname || "Thành viên lớp"}</p>
-          <p class="text-[10px] text-neutral-500 mt-1 line-clamp-3">${member.quote || "Châm ngôn chưa có."}</p>
+    // Nếu số này đã có người điền tên
+    if (account && account.name) {
+      totalClaimed++;
+      card.innerHTML = `
+        <div class="absolute top-2 left-2 w-5 h-5 bg-brand-700 text-white rounded-full flex items-center justify-center font-mono text-[10px] font-bold">
+          ${i}
         </div>
-      </div>`;
+        <div class="pt-2">
+          <h4 class="font-bold text-neutral-800 text-sm">${i}. ${account.name}</h4>
+          <p class="text-[11px] text-emerald-600 font-medium mt-1">
+            <i class="fa-solid fa-circle-check mr-1"></i>Đã nhận
+          </p>
+        </div>
+      `;
+    } else {
+      // Nếu số này còn trống, chưa có ai điền
+      card.innerHTML = `
+        <div class="absolute top-2 left-2 w-5 h-5 bg-neutral-200 text-neutral-500 rounded-full flex items-center justify-center font-mono text-[10px]">
+          ${i}
+        </div>
+        <div class="pt-2 text-neutral-400">
+          <h4 class="text-sm font-medium">${i}. Trống</h4>
+          <p class="text-[10px] mt-1 italic">Chưa đăng ký</p>
+        </div>
+      `;
+    }
 
     grid.appendChild(card);
-  });
-}
+  }
 
+  // Cập nhật lại số lượng thành viên đã đăng ký lên giao diện
+  if (countEl) countEl.innerText = String(totalClaimed);
+};
 // Enable dragging and resizing for the member slots widget (pointer-friendly)
 function initWidgetDragResize() {
   try {
@@ -645,20 +839,23 @@ function initWidgetDragResize() {
 // ==========================================
 enforceFeatureLockUI();
 
-window.addEventListener("slotsComponentReady", () => {
+window.addEventListener("slotsComponentReady", async () => {
   updateWidgetProfileUI();
   initWidgetDragResize();
   initFirestoreRealtime();
+  if (chosenSlotNumber) await activateSlotPresence();
 });
 
 if (document.getElementById("slots-dropdown-container")) {
   updateWidgetProfileUI();
   initWidgetDragResize();
   initFirestoreRealtime();
+  if (chosenSlotNumber) activateSlotPresence();
 }
 
 window.addEventListener("firebaseInitialized", () => {
   initFirestoreRealtime();
+  if (chosenSlotNumber) activateSlotPresence();
   if (window.auth && window.FB_AUTH) {
     window.FB_AUTH.onAuthStateChanged(window.auth, (user) => {
       window.syncAdminAccessFromAuth(user);
@@ -668,9 +865,14 @@ window.addEventListener("firebaseInitialized", () => {
 
 if (window.db && window.FB_FIRESTORE) {
   initFirestoreRealtime();
+  if (chosenSlotNumber) activateSlotPresence();
 }
 if (window.auth && window.FB_AUTH) {
   window.FB_AUTH.onAuthStateChanged(window.auth, (user) => {
     window.syncAdminAccessFromAuth(user);
   });
 }
+
+window.addEventListener("beforeunload", async () => {
+  await releaseSlotPresence();
+});

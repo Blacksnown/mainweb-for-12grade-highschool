@@ -151,7 +151,7 @@
             id="tab-signatures"
             class="tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-neutral-600 hover:text-brand-900 transition-all flex items-center gap-2"
           >
-            <i class="fa-solid fa-signature"></i>Nét Bút Chữ Ký
+            <i class="fa-solid fa-signature"></i> Chữ Ký
           </button>
           <button
             onclick="switchTab('gallery')"
@@ -199,68 +199,38 @@
         </div>
       </div>
     </header>
-
-    <!-- MUSIC PLAYER WIDGET -->
-    <!-- <div class="fixed bottom-6 right-6 z-40">
-      <div
-        id="music-player-panel"
-        class="bg-white/95 border border-brand-200 p-3 rounded-2xl shadow-premium flex items-center gap-4 transition-all duration-300 transform scale-95 origin-bottom-right hover:scale-100 group"
-      >
-        <div class="flex items-center gap-2.5">
-          <button
-            id="music-trigger"
-            onclick="toggleSynthMusic()"
-            class="bg-brand-700 hover:bg-brand-800 text-white w-9 h-9 rounded-xl flex items-center justify-center shadow transition-all active:scale-95"
-          >
-            <i class="fa-solid fa-play" id="music-icon"></i>
-          </button>
-          <div class="text-left select-none pr-2">
-            <p
-              class="text-[10px] font-bold text-brand-700 tracking-wider uppercase"
-            >
-              Giai Điệu Thư Thái
-            </p>
-            <p
-              class="text-xs font-semibold text-neutral-700 truncate max-w-[100px]"
-              id="current-track-name"
-            >
-              Nostalgia piano
-            </p>
-          </div>
-        </div>
-        <div
-          class="hidden sm:flex items-center gap-2 border-l border-brand-100 pl-3"
-        >
-          <i class="fa-solid fa-volume-low text-neutral-400 text-xs"></i>
-          <input
-            type="range"
-            id="synth-volume"
-            min="0"
-            max="100"
-            value="30"
-            oninput="adjustVolume(this.value)"
-            class="w-16 h-1 bg-brand-200 rounded-lg appearance-none cursor-pointer accent-brand-700"
-          />
-        </div>
-      </div>
-    </div> -->
-
     <!-- MAIN CONTAINER FRAME -->
     <main class="max-w-7xl mx-auto px-4 py-6 relative">
-      <!-- REAL-TIME CLOUD SYNC DIAGNOSTIC BAR -->
-      <div
-        id="sync-status"
-        class="mb-6 text-xs flex flex-wrap items-center justify-between gap-3 p-3 bg-white/60 backdrop-blur border border-brand-200/50 rounded-2xl shadow-sm"
-      >
+   
+    <div id="cohuong-dynamic-zone" class="hidden max-w-4xl mx-auto my-6 px-4 animate-fade-in">
+  <div class="bg-gradient-to-r from-amber-50 via-orange-50 to-yellow-50 border border-amber-200/80 rounded-3xl p-5 shadow-sm relative overflow-hidden group">
+    <div class="absolute -top-6 -right-6 w-16 h-16 bg-amber-200/30 rounded-full blur-xl transition-all group-hover:scale-150"></div>
+    
+    <div class="flex items-start gap-3.5 relative z-10">
+      <div class="w-10 h-10 bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-2xl flex items-center justify-center shadow-md shadow-orange-500/20 text-lg shrink-0">
+        📢
+      </div>
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center gap-2 flex-wrap">
+          <span class="text-xs font-bold text-orange-800 uppercase tracking-wider bg-orange-100/80 px-2.5 py-0.5 rounded-full border border-orange-200/50">Thông báo từ Cô Hường</span>
+          <span id="cohuong-zone-time" class="text-[10px] text-neutral-400 font-medium font-mono">--:--</span>
+        </div>
+        <p id="cohuong-zone-text" class="text-neutral-700 text-sm font-medium mt-2 leading-relaxed whitespace-pre-line"></p>
+      </div>
+    </div>
+  </div>
+</div>
         <div class="flex items-center gap-2.5">
           <span
             id="status-dot"
             class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"
           ></span>
-          <span id="status-text" class="text-neutral-600 font-medium"
-            >Loading...</span
-          >
+          <span id="status-text" class="text-neutral-600 font-medium"></span>
         </div>
+        <div
+          id="cohuong-announcement-banner"
+          class="hidden w-full rounded-3xl bg-amber-500/10 border border-amber-300 text-amber-900 px-4 py-3 text-[11px] font-semibold transition-all duration-300"
+        ></div>
         <button
           id="rule-guide-btn"
           onclick="openRulesModal()"
@@ -1317,6 +1287,11 @@
                 onclick="setInkColor('#4ade80')"
                 class="ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-green-400"
                 data-color="#4ade80"
+              ></button>
+              <button
+                onclick="setInkColor('#a78bfa')"
+                class="ink-color-btn w-6 h-6 rounded-full border-2 border-transparent bg-purple-400"
+                data-color="#a78bfa"
               ></button>
             </div>
           </div>
@@ -2506,13 +2481,18 @@ service cloud.firestore {
             const html = await response.text();
             document.getElementById("slots-component-placeholder").innerHTML =
               html;
-            window.dispatchEvent(new Event("slotsComponentReady"));
             console.log("-> [DOM] Đã dựng xong giao diện member.html");
 
             // 2. CHỈ KHI ĐÃ CÓ GIAO DIỆN: Tiến hành nạp file logic script.js để dựng 52 số
             const mainScript = document.createElement("script");
             mainScript.type = "module";
-            mainScript.src = "script.js";
+            mainScript.src = "./script.js";
+            mainScript.onload = () => {
+              window.dispatchEvent(new Event("slotsComponentReady"));
+            };
+            mainScript.onerror = (err) => {
+              console.error("Không thể tải script.js:", err);
+            };
             document.body.appendChild(mainScript);
           } else {
             console.error("Không thể tải tệp mã nguồn thành phần member.html");
@@ -2526,5 +2506,49 @@ service cloud.firestore {
     </script>
     <!-- The slots component dynamically loads script.js once; avoid duplicate module injection -->
     <script src="admin-features.js"></script>
+
+
+    <div id="cohuong-prompt-modal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm hidden animate-fade-in">
+  <div class="bg-gradient-to-b from-white to-amber-50/40 w-full max-w-md rounded-3xl border border-amber-200 p-6 shadow-premium relative overflow-hidden">
+    <div class="absolute -top-12 -right-12 w-24 h-24 bg-amber-100/50 rounded-full blur-xl"></div>
+    
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-9 h-9 bg-gradient-to-br from-amber-500 to-orange-500 text-white rounded-xl flex items-center justify-center shadow-sm text-base">
+        📢
+      </div>
+      <div>
+        <h3 class="font-bold text-neutral-800 text-sm">Bảng Điều Khiển Thông Báo</h3>
+        <p class="text-[11px] text-neutral-500">Phát tin tức thời gian thực tới toàn bộ website</p>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <label class="block text-[11px] font-bold text-orange-800 uppercase tracking-wider">Nội dung thông báo</label>
+      <textarea 
+        id="cohuong-modal-input" 
+        rows="4" 
+        placeholder="Cô nhập thông báo tại đây..." 
+        class="w-full bg-white border border-neutral-200 focus:border-amber-500 focus:ring-2 focus:ring-amber-200/60 rounded-2xl p-3 text-sm text-neutral-700 outline-none transition-all shadow-inner resize-none"
+      ></textarea>
+    </div>
+
+    <div class="flex items-center justify-end gap-2 mt-5">
+      <button 
+        type="button" 
+        onclick="document.getElementById('cohuong-prompt-modal').classList.add('hidden')" 
+        class="px-4 py-2 rounded-xl text-xs font-semibold text-neutral-500 hover:bg-neutral-100 transition-all"
+      >
+        Hủy bỏ
+      </button>
+      <button 
+        type="button" 
+        onclick="submitCohuongModalAnnouncement()" 
+        class="px-5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 shadow-md shadow-orange-500/10 transition-all"
+      >
+        Phát thông báo ngay
+      </button>
+    </div>
+  </div>
+</div>
   </body>
 </html>

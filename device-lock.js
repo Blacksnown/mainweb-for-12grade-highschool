@@ -246,7 +246,7 @@ window.addEventListener("firebaseInitialized", () => {
           // Gửi thông báo trực tiếp lên cơ sở dữ liệu Cloud Firestore đám mây công khai
           // Tài khoản Admin đã đăng ký đăng nhập trên thiết bị chính chủ sẽ nhận được thông báo thời gian thực này ngay lập tức
           await addDoc(collection(window.db, ADMIN_ALERTS_COLLECTION), {
-            alertType: "UNAUTHORIZED_ADMIN_LOGIN_ATTEMPT",
+            alertType: "Warning: You are trying to access a restricted area.",
             adminUid: HARDCODED_ADMIN_UID,
             detectedAt: Date.now(),
             userAgent: navigator.userAgent,
